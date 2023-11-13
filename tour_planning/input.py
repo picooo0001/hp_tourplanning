@@ -25,7 +25,6 @@ class TourCreation:
         """
         self.date = None
         self.kolonne = None
-        self.person = None
         self.strasse = None
         self.hausnr = None
         self.plz = None
@@ -35,7 +34,7 @@ class TourCreation:
     
     def date_input(self):
         """
-         Fordert den Benutzer auf, ein Datum im Format DD/MM/YYYY einzugeben.
+        Fordert den Benutzer auf, ein Datum im Format DD/MM/YYYY einzugeben.
         Validiert die Eingabe auf Realismus (nicht in der Vergangenheit, nicht mehr als 1 Jahr in der Zukunft).
 
         Returns:
@@ -61,10 +60,42 @@ class TourCreation:
                     return date_object
             except ValueError:
                 # Fehler bei Datumsvalidierung
-                print("Ungültiges Datum. Bitte Format DD/MM/YYY verwenden")        
+                print("Ungültiges Datum. Bitte Format DD/MM/YYY verwenden")
+
+    def kolonne_input(self):
+        """
+        Fordert den Benutzer auf, eine Kolonne aus vordefinierten Werten auszuwählen.
+
+        Return:
+            str: Der ausgewählte Wert (Kolonne + Verantwortlicher)
+        """
+        vordefinierte_kolonnen = ["Kolonne Ferat - Hardy", "Kolonne Driton - Heni", "Kolonne Argon - Uwe", "Kolonne Benni - Ivan", "Kolonne Bogdan - Marius", "Kolonne Adrian - ???" , "Kolonne Alin - ??? ", "Kolonne Daniel - ??? ", "Kolonne Sabit - ???", "Kolonne Sabit - ???"]
+        
+        while True:
+            
+            print("Verfügbare Werte:")
+            for index, value in enumerate(vordefinierte_kolonnen, start=1):
+                print(f"{index}. {value}")
+            
+            user_input = int(input("Bitte Wert zwischen 1 - 10 eingeben:"))
+
+            try: 
+                index = user_input
+                if 1 <= index <= len(vordefinierte_kolonnen):
+                    selected_kolonne = vordefinierte_kolonnen[index - 1]
+                    self.kolonne = selected_kolonne
+                    return selected_kolonne
+            # nicht ganz funktional -> später überprüfen (keine Beeinträchtigung)
+            except (ValueError, IndexError):
+                print("Ungültige Eingabe. Bitte gebe eine Zahl zwischen 1 und 10 ein.")
+                continue
+                        
 
 if __name__ == "__main__":
     tourcreation = TourCreation()
     #selected_date = tourcreation.date_input()
     #print(f"Das ausgewählte und validierte Datum ist: {selected_date.strftime('%d/%m/%Y')}")
+    #selected_kolonne = tourcreation.kolonne_input()
+    #print(f"Der ausgewählte Wert ist: {selected_kolonne}")
+    #print(f"Der ausgewählte Wert wurde in self.kolonne gespeichert: {tourcreation.kolonne}")
 

@@ -8,7 +8,7 @@
 - Input (cli): 
     - 1. Wer? Welche Kolonne?, Welcher Tag? 
     - 2. Wo? Adresse, Firmenname, zustätzl. Info (**input validation**)
-    - 3. Optionen um sachen zu ändern / rückgängig zu machen
+    - 3. Optionen um sachen zu ändern / rückgängig zu machen / bearbeiten
 - Ausgabe (cli):
     - 1. Termine für bestimmten Tag auflisten
     - 2. insgesamte Anzeige (mit Filter nach Kolonne/ wichtige Personen)
@@ -18,3 +18,5 @@
     - 3. von Punkt 2 abhängig: wie viele Benutzer?
     - 4. Login / PW?
     
+- Checks:
+    - 1. Adressen check mit api 

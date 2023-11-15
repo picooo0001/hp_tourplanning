@@ -8,7 +8,8 @@
 - Input (cli): 
     - 1. Wer? Welche Kolonne?, Welcher Tag? 
     - 2. Wo? Adresse, Firmenname, zustätzl. Info (**input validation**)
-    - 3. Optionen um sachen zu ändern / rückgängig zu machen / bearbeiten
+    - 3. Optionen um sachen zu ändern / rückgängig zu machen / bearbeiten / touren zwischen kolonnen herzuschieben
+    - 4. Logging?
 - Ausgabe (cli):
     - 1. Termine für bestimmten Tag auflisten
     - 2. insgesamte Anzeige (mit Filter nach Kolonne/ wichtige Personen)

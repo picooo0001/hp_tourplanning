@@ -38,3 +38,13 @@
 
 ## Info Input Testcases
     - alles erlaubt auch leer - Test erfolgreich
+
+## Adress Check Testcases
+    - richitge Adresse - Test erfolgreich
+    - richtige Adresse mit xy/y als Hausnr - Test erfolgreich
+    - falsche Adressen - Test erfolgreich
+
+## Save Input Testcases
+    - ja - Test erfolgreich
+    - nein - Test erfolgreich
+    - anderes - Test erfolgreich

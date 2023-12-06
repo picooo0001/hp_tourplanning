@@ -15,3 +15,12 @@
 - installed PostgreSQL for testing
 - wrote class DatabaseConnector which connects to db
 - added new folder in tour_planning for db stuff
+- created docker compose file for creting docker environment
+
+## 07.12
+- created Database
+- rewrote DatabaseConnector
+- added DatabaseDisconnector
+- added orm.py with the database model
+- added input_private to TourCreation
+- started connecting all together (input_to_database.py)

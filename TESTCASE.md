@@ -48,3 +48,8 @@
     - ja - Test erfolgreich
     - nein - Test erfolgreich
     - anderes - Test erfolgreich
+
+## Privatperson ja nein
+    - ja - Test erfolgreich
+    - nein - Test erfolgreich
+    - jein - Test erfolgreich

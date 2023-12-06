@@ -187,7 +187,27 @@ class TourCreation:
                 return firmenname_input.title()  
             else:
                 print("Ungültige Eingabe. Der Firmenname sollte nicht leer sein und erlaubte Zeichen wie Zahlen, Buchstaben, Leerzeichen und einige Sonderzeichen können verwendet werden.")
+    
+    def input_private(self):
+        """
+        Fordert den Benutzer auf, anzugeben ob es sich um einen Privatkunden handelt.
+        Validiert die Eingabe auf Realismus (Ja / Nein -> True / False).
 
+        Returns:
+            bool: true, false
+        """
+
+        while True:
+            private_input = input("Handelt es sich um eine Privatperson: ").strip().lower()
+
+            if private_input == "ja":
+                self.private = True
+                return bool
+            elif private_input == "nein":
+                self.private = False
+                return bool
+            else:
+                print("Ungültige Eingabe. Bitte Ja / Nein eingeben.")
     def input_info(self):
         """
         Fordert den Benutzer auf, zusätzliche Informationen einzugeben.
@@ -226,6 +246,8 @@ if __name__ == "__main__":
     selected_ort = tourcreation.input_ort()
     #print(f"Die ausgewählte und validierte Ortsangabe ist: {selected_ort}")
     selected_firmenname = tourcreation.input_firmenname()
+    selected_private = tourcreation.input_private()
+    #print(f"Der Auftraggeber ist eine Privatperson: {selected_private}")
     #print(f"Die ausgewählte und validierte Ortsangabe ist: {selected_firmenname}") 
     selected_info = tourcreation.input_info()
     #print(f"Die ausgewählten und validierten zusätzlichen Informationen sind: {selected_info}")
@@ -238,4 +260,5 @@ if __name__ == "__main__":
             print("Speicherung abgebrochen")
     else:
         print("Diese Adresse existiert nicht.")
+
 

@@ -16,7 +16,7 @@ class DatabaseConnector:
         """
         self.engine = create_engine(db_url)
         self.Session = sessionmaker(bind=self.engine)
-        logging.basicConfig(filename='api_logs.log', level=logging.INFO)
+        logging.basicConfig(filename='db_logs.log', level=logging.INFO)
 
     def get_session(self):
         """
@@ -42,14 +42,14 @@ class DatabaseConnector:
         
 class DatabaseDisconnector:
     """Verwaltet das Schließen der Datenbankverbindung."""
-    def __init__(self, db_connector):
+    def __init__(self):
         """
         Initialisiert den Disconnector mit dem Connector.
 
         Args:
             db_connector (DatabaseConnector): Der DatabaseConnector für die Datenbankverbindung.
         """
-        self.db_connector = db_connector
+        self.db_connector = DatabaseConnector()
         logging.basicConfig(filename='api_logs.log', level=logging.INFO)
 
     def close_connection(self):
@@ -80,9 +80,9 @@ class DatabaseDisconnector:
 
 
 # Verbindung herstellen
-db_connector = DatabaseConnector('postgresql://hp_admin:Nudelholz03#@localhost/hp_postgres')
-session, message = db_connector.get_session()
+#db_connector = DatabaseConnector('postgresql://hp_admin:Nudelholz03#@localhost/hp_postgres')
+#session, message = db_connector.get_session()
 
 #Verbindung schließen
-db_disconnector = DatabaseDisconnector(db_connector)
-success, message = db_disconnector.close_connection()
+#db_disconnector = DatabaseDisconnector(db_connector)
+#success, message = db_disconnector.close_connection()

@@ -202,10 +202,10 @@ class TourCreation:
 
             if private_input == "ja":
                 self.private = True
-                return bool
+                return True
             elif private_input == "nein":
                 self.private = False
-                return bool
+                return False
             else:
                 print("Ungültige Eingabe. Bitte Ja / Nein eingeben.")
     def input_info(self):

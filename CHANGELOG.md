@@ -24,3 +24,8 @@
 - added orm.py with the database model
 - added input_private to TourCreation
 - started connecting all together (input_to_database.py)
+
+## 8.12
+- restructured folder
+- continued working on input_to_database (still not fully working)
+- updated (db_connect_disconnect) -> disconnect class not fully working 

@@ -1,4 +1,4 @@
-from sqlalchemy import ForeignKey,Column, VARCHAR, Date, Boolean, Enum, SmallInteger, Sequence
+from sqlalchemy import ForeignKey,Column, VARCHAR, Date, Boolean, Enum, SmallInteger, Sequence, Integer
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -7,7 +7,7 @@ class Tour(Base):
     """Tabelle für Touren."""
     __tablename__ = 'tour'
 
-    tour_id = Column(SmallInteger, Sequence('tour_id_seq') ,primary_key=True)
+    tour_id = Column(Integer,primary_key=True, autoincrement=True)
     address_id = Column(SmallInteger, ForeignKey('address.address_id'))
     client_id = Column(SmallInteger, ForeignKey('client.client_id'))
     date = Column(Date)
@@ -23,15 +23,15 @@ class Address(Base):
     """Tabelle für Adressen."""
     __tablename__ = 'address'
 
-    address_id = Column(SmallInteger, Sequence('address_id_seq'), primary_key=True)
+    address_id = Column(Integer, primary_key=True, autoincrement=True)
     strasse = Column(VARCHAR(255))
     hausnr = Column(VARCHAR(20))
-    plz = Column(SmallInteger)
+    plz = Column(Integer)
     ort = Column(VARCHAR(100))
 
 class Client(Base):
     """Tabelle für Kunden."""
     __tablename__ = 'client'
 
-    client_id = Column(SmallInteger, Sequence('client_id_seq'), primary_key=True)
+    client_id = Column(Integer, primary_key=True, autoincrement=True)
     firmenname = Column(VARCHAR(255))

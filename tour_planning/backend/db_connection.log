@@ -1,0 +1,15 @@
+INFO:root:('Verbindung erfolgreich hergestellt.', '2023-12-09 12:37:40')
+INFO:root:('Verbindung erfolgreich hergestellt.', '2023-12-09 12:37:40')
+INFO:root:[2023-12-09 12:38:10] Adresse: Killingerstr 33 74182 Obersulm, API-Antwort: [{'place_id': 141164310, 'licence': 'Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright', 'osm_type': 'way', 'osm_id': 762838491, 'lat': '49.1386682', 'lon': '9.409840292950967', 'class': 'building', 'type': 'house', 'place_rank': 30, 'importance': 9.99999999995449e-06, 'addresstype': 'building', 'name': '', 'display_name': '33, Killingerstraße, Obersulm, Eschenau, Verwaltungsgemeinschaft Obersulm, Landkreis Heilbronn, Baden-Württemberg, 74182, Deutschland', 'boundingbox': ['49.1385758', '49.1387513', '9.4097261', '9.4099273']}], API-Statuscode: 200
+INFO:root:('Verbindung erfolgreich geschlossen.', '2023-12-09 12:38:12')
+INFO:root:('Verbindung erfolgreich hergestellt.', '2023-12-09 12:42:25')
+INFO:root:('Verbindung erfolgreich hergestellt.', '2023-12-09 12:42:25')
+INFO:root:[2023-12-09 12:43:02] Adresse: Killingerstr 33 74182 Obersulm, API-Antwort: [{'place_id': 141164310, 'licence': 'Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright', 'osm_type': 'way', 'osm_id': 762838491, 'lat': '49.1386682', 'lon': '9.409840292950967', 'class': 'building', 'type': 'house', 'place_rank': 30, 'importance': 9.99999999995449e-06, 'addresstype': 'building', 'name': '', 'display_name': '33, Killingerstraße, Obersulm, Eschenau, Verwaltungsgemeinschaft Obersulm, Landkreis Heilbronn, Baden-Württemberg, 74182, Deutschland', 'boundingbox': ['49.1385758', '49.1387513', '9.4097261', '9.4099273']}], API-Statuscode: 200
+INFO:root:Datenbankeintrag erfolgreich erstellt und Adressen/Touren zugeordnet.
+INFO:root:('Verbindung erfolgreich geschlossen.', '2023-12-09 12:43:04')
+INFO:root:Datenbankverbindung geschlossen.
+2023-12-09 13:33:10,569 INFO ('Verbindung erfolgreich hergestellt.', '2023-12-09 13:33:10')
+2023-12-09 13:33:10,571 INFO ('Verbindung erfolgreich hergestellt.', '2023-12-09 13:33:10')
+2023-12-09 13:33:10,571 INFO ('Verbindung erfolgreich hergestellt.', '2023-12-09 13:33:10')
+2023-12-09 13:33:40,454 INFO ('Verbindung erfolgreich geschlossen.', '2023-12-09 13:33:40')
+2023-12-09 13:33:40,454 INFO ('Verbindung erfolgreich geschlossen.', '2023-12-09 13:33:40')

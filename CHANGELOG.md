@@ -28,4 +28,10 @@
 ## 8.12
 - restructured folder
 - continued working on input_to_database (still not fully working)
-- updated (db_connect_disconnect) -> disconnect class not fully working 
+- updated (db_connect_disconnect) -> disconnect class not fully working
+
+## 9.12
+- finished input_to_database (fully working now with address check)
+- fixed DBConnector (fully working now)
+- restructured "log policy" meaning created new class for log management -> each function which writes into logfiles writ
+- deleted unnecessary code

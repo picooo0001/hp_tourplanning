@@ -229,36 +229,36 @@ class TourCreation:
         user_input = str(input("Möchten Sie die Adresse mit Kolonne, Datum und Firma in die Datenbank speichern? (Ja/Nein): "))
         return user_input.lower() == "ja"
     
-if __name__ == "__main__":
-    tourcreation = TourCreation()
+#if __name__ == "__main__":
+    #tourcreation = TourCreation()
     #selected_date = tourcreation.date_input()
     #print(f"Das ausgewählte und validierte Datum ist: {selected_date.strftime('%d/%m/%Y')}")
     #selected_kolonne = tourcreation.kolonne_input()
     #print(f"Der ausgewählte Wert ist: {selected_kolonne}")
     #print(f"Der ausgewählte Wert wurde in self.kolonne gespeichert: {tourcreation.kolonne}")
-    selected_strasse = tourcreation.input_strasse()
+    #selected_strasse = tourcreation.input_strasse()
     #print(f"Der eingegebene Straßenname ist: {selected_strasse}")
     #print(f"Der eingegebene Straßenname wurde in self.strasse gespeichert: {tourcreation.strasse}")
-    selected_hausnr = tourcreation.input_hausnr()
+    #selected_hausnr = tourcreation.input_hausnr()
     #print(f"Die ausgewählte und validierte Hausnummer ist: {selected_hausnr}")
-    selected_plz = tourcreation.input_plz()
+    #selected_plz = tourcreation.input_plz()
     #print(f"Die ausgewählte und validierte Postleitzahl ist: {selected_plz}")
-    selected_ort = tourcreation.input_ort()
+    #selected_ort = tourcreation.input_ort()
     #print(f"Die ausgewählte und validierte Ortsangabe ist: {selected_ort}")
-    selected_firmenname = tourcreation.input_firmenname()
-    selected_private = tourcreation.input_private()
+    #selected_firmenname = tourcreation.input_firmenname()
+    #selected_private = tourcreation.input_private()
     #print(f"Der Auftraggeber ist eine Privatperson: {selected_private}")
     #print(f"Die ausgewählte und validierte Ortsangabe ist: {selected_firmenname}") 
-    selected_info = tourcreation.input_info()
+    #selected_info = tourcreation.input_info()
     #print(f"Die ausgewählten und validierten zusätzlichen Informationen sind: {selected_info}")
-    validator = BackgroundChecks(selected_strasse, selected_hausnr, selected_plz, selected_ort)
-    if validator.check_adress_existance():
-        if tourcreation.ask_user_to_save_input():
-            # Datenbankspeicherung Code hier
-            print("Adresse wird in Datenbank gespeichert")
-        else:
-            print("Speicherung abgebrochen")
-    else:
-        print("Diese Adresse existiert nicht.")
+    #validator = BackgroundChecks(selected_strasse, selected_hausnr, selected_plz, selected_ort)
+    #if validator.check_adress_existance():
+    #    if tourcreation.ask_user_to_save_input():
+    #        Datenbankspeicherung Code hier
+    #        print("Adresse wird in Datenbank gespeichert")
+    #    else:
+    #       print("Speicherung abgebrochen")
+    #else:
+    #    print("Diese Adresse existiert nicht.")
 
 

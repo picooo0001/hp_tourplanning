@@ -47,30 +47,34 @@ class DataWriter:
         if validator.check_adress_existance():
             if self.tourcreation.ask_user_to_save_input():
                 print("Adresse wird in datenbank gespeichert")
+                return True
             else:
                 print("Speicherung abgebrochen")
+                return False
         else:
             print("Diese Adresse existiert nicht")
+            return False
     
     def write_tour_data_to_db(self):
         """Schreibt Tourdaten in die Datenbank und ordnet sie Adressen und Kunden zu."""
         try:
             self.create_db_entry()
-            self.check_address()
-            self.session.add(self.new_client)
-            self.session.add(self.new_address)
-            self.session.commit()
+            if self.check_address():
+                self.session.add(self.new_client)
+                self.session.add(self.new_address)
+                self.session.commit()
 
-            client_id = self.new_client.client_id
-            address_id = self.new_address.address_id
+                client_id = self.new_client.client_id
+                address_id = self.new_address.address_id
 
-            self.new_tour.client_id = client_id
-            self.new_tour.address_id = address_id
+                self.new_tour.client_id = client_id
+                self.new_tour.address_id = address_id
 
-            self.session.add(self.new_tour)
-            self.session.commit()
-            self.logger.info("Datenbankeintrag erfolgreich erstellt und Adressen/Touren/Clients zugeordnet.")
-
+                self.session.add(self.new_tour)
+                self.session.commit()
+                self.logger.info("Datenbankeintrag erfolgreich erstellt und Adressen/Touren/Clients zugeordnet.")
+            else:
+                pass
         except Exception as e:
                 log_message = f"Fehler beim Erstellen des Datenbankeintrags: {str(e)}"
                 self.logger.error(log_message)

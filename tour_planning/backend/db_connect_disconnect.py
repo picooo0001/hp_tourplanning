@@ -1,9 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import ResourceClosedError
-import logging
-from datetime import *
-
+from log_config import LogConfig
 
 class DatabaseConnector:
     """Stellt eine Verbindung zur Datenbank her und verwaltet Sitzungen für Datenbankoperationen."""
@@ -16,7 +14,8 @@ class DatabaseConnector:
         """
         self.engine = create_engine(db_url)
         self.Session = sessionmaker(bind=self.engine)
-        logging.basicConfig(filename='db_logs.log', level=logging.INFO)
+        log_config = LogConfig()
+        self.logger = log_config.setup_logger('db_connection_logger', 'db_connection.log')
 
     def get_session(self):
         """
@@ -29,29 +28,16 @@ class DatabaseConnector:
         Raises:
             Exception: Wird ausgelöst, wenn ein Fehler beim Verbindungsaufbau auftritt.
         """
-        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         try:
             session = self.Session()
-            message = "Verbindung erfolgreich hergestellt.", timestamp
-            logging.info(message)  # Schreibe die Nachricht ins Logfile
+            message = "Verbindung erfolgreich hergestellt."
+            self.logger.info(message)
             return session, message
         except Exception as e:
             message = f"Fehler beim Verbindungsaufbau: {str(e)}"
-            logging.error(message)  # Schreibe die Fehlermeldung ins Logfile
+            self.logger.error(message)
             return None, message
         
-class DatabaseDisconnector:
-    """Verwaltet das Schließen der Datenbankverbindung."""
-    def __init__(self):
-        """
-        Initialisiert den Disconnector mit dem Connector.
-
-        Args:
-            db_connector (DatabaseConnector): Der DatabaseConnector für die Datenbankverbindung.
-        """
-        self.db_connector = DatabaseConnector()
-        logging.basicConfig(filename='api_logs.log', level=logging.INFO)
-
     def close_connection(self):
         """
         Schließt die Datenbankverbindung.
@@ -63,26 +49,16 @@ class DatabaseDisconnector:
         Raises:
             Exception: Wird ausgelöst, wenn ein Fehler beim Schließen der Verbindung auftritt.
         """
-        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         try:
-            self.db_connector.engine.dispose()
-            message = "Verbindung erfolgreich geschlossen.", timestamp
-            logging.info(message)  # Schreibe die Nachricht ins Logfile
+            self.engine.dispose()
+            message = "Verbindung erfolgreich geschlossen."
+            self.logger.info(message)
             return True, message
         except ResourceClosedError:
-            message = "Verbindung ist bereits geschlossen.", timestamp
-            logging.warning(message)  # Schreibe die Warnung ins Logfile
+            message = "Verbindung ist bereits geschlossen."
+            self.logger.warning(message)
             return True, message
         except Exception as e:
-            message = f"Fehler beim Schließen der Verbindung: {str(e)}" , timestamp
-            logging.error(message)  # Schreibe die Fehlermeldung ins Logfile
+            message = f"Fehler beim Schließen der Verbindung: {str(e)}"
+            self.logger.error(message)
             raise Exception(message)
-
-
-# Verbindung herstellen
-#db_connector = DatabaseConnector('postgresql://hp_admin:Nudelholz03#@localhost/hp_postgres')
-#session, message = db_connector.get_session()
-
-#Verbindung schließen
-#db_disconnector = DatabaseDisconnector(db_connector)
-#success, message = db_disconnector.close_connection()

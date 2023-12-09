@@ -1,6 +1,6 @@
 import requests
-import logging
 from datetime import *
+from log_config import LogConfig
 
 class BackgroundChecks:
     """
@@ -18,7 +18,8 @@ class BackgroundChecks:
         self.plz = plz
         self.ort = ort
 
-        logging.basicConfig(filename='api_logs.log', level=logging.INFO)
+        log_config = LogConfig()
+        self.logger = log_config.setup_logger('background_check_logger', 'address_check.log')
 
     def check_adress_existance(self):
         """
@@ -39,8 +40,8 @@ class BackgroundChecks:
         response = requests.get(url, params=params)
 
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        log_message = f"[{timestamp}] Adresse: {address}, API-Antwort: {response.json()}, API-Statuscode: {response.status_code}"
-        logging.info(log_message)
+        log_message = f"Adresse: {address}, API-Antwort: {response.json()}, API-Statuscode: {response.status_code}"
+        self.logger.info(log_message)
 
         if response.ok and len(response.json()) > 0:
             return True

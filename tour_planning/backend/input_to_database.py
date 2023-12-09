@@ -3,6 +3,7 @@ from orm import Tour, Address, Client
 from user_input import TourCreation
 from background_checks import BackgroundChecks
 from log_config import LogConfig
+from sqlalchemy import and_
 
 class DataWriter:
     """Klasse zum Schreiben von Daten in die Datenbank.
@@ -36,6 +37,20 @@ class DataWriter:
                               plz=self.tourcreation.input_plz(),
                               ort=self.tourcreation.input_ort())
         
+        existing_address = self.session.query(Address).filter(
+             and_(
+                  Address.strasse == self.new_address.strasse,
+                  Address.hausnr == self.new_address.hausnr,
+                  Address.plz == self.new_address.plz,
+                  Address.ort == self.new_address.ort
+             )
+        ).first()
+
+        if existing_address:
+             self.new_address = existing_address
+        else:
+             self.new_address = self.new_address
+
         self.new_client = Client(firmenname=self.tourcreation.input_firmenname())
 
     def check_address(self):

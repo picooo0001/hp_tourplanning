@@ -4,6 +4,7 @@ from user_input import TourCreation
 from background_checks import BackgroundChecks
 from log_config import LogConfig
 from sqlalchemy import and_
+from datetime import datetime
 
 class DataWriter:
     """Klasse zum Schreiben von Daten in die Datenbank.
@@ -17,7 +18,7 @@ class DataWriter:
         logger: Der Logger für das Schreiben von Logmeldungen.
     """
 
-    def __init__(self):
+    def __init__(self, date, kolonne, strasse, hausnr, plz, ort, firmenname, info, private):
         """Initialisiert die DataWriter-Klasse."""
         self.db_connector = DatabaseConnector('postgresql://hp_admin:Nudelholz03#@localhost/hp_postgres')
         self.session, _ = self.db_connector.get_session()
@@ -25,17 +26,31 @@ class DataWriter:
         log_config = LogConfig()
         self.logger = log_config.setup_logger('db_entry_log', 'db_entry.log')
 
+        self.date = date
+        self.kolonne = kolonne
+        self.strasse = strasse
+        self.hausnr = hausnr
+        self.plz = plz
+        self.ort = ort
+        self.firmenname = firmenname
+        self.info = info
+        self.private = private
+
+
     def create_db_entry(self):
         """Erstellt neue Einträge für Tour, Adresse und Kunde."""
-        self.new_tour = Tour(date=self.tourcreation.date_input(), 
-                        kolonne_type=self.tourcreation.kolonne_input(),
-                        private=self.tourcreation.input_private(),
-                        further_info=self.tourcreation.input_info())
+        date_obj = datetime.strptime(self.date, '%d/%m/%Y')
+        formatted_date = date_obj.strftime('%Y-%m-%d')
+
+        self.new_tour = Tour(date=formatted_date,
+                        #kolonne_type=self.kolonne,
+                        #private=self.private,
+                        further_info=self.info)
         
-        self.new_address = Address(strasse=self.tourcreation.input_strasse(),
-                              hausnr=self.tourcreation.input_hausnr(),
-                              plz=self.tourcreation.input_plz(),
-                              ort=self.tourcreation.input_ort())
+        self.new_address = Address(strasse=self.strasse,
+                              hausnr=self.hausnr,
+                              plz=self.plz,
+                              ort=self.ort)
         
         existing_address = self.session.query(Address).filter(
              and_(
@@ -51,7 +66,16 @@ class DataWriter:
         else:
              self.new_address = self.new_address
 
-        self.new_client = Client(firmenname=self.tourcreation.input_firmenname())
+        self.new_client = Client(firmenname=self.firmenname)
+
+        existing_client = self.session.query(Client).filter(and_(
+             Client.firmenname == self.new_client.firmenname
+        )).first()
+
+        if existing_client:
+             self.new_client = existing_client
+        else:
+             self.new_client = self.new_client
 
     def check_address(self):
         """Überprüft die Existenz einer Adresse und speichert sie in der Datenbank, falls gewünscht."""
@@ -60,14 +84,9 @@ class DataWriter:
                                      plz=self.new_address.plz,
                                      ort=self.new_address.ort)
         if validator.check_adress_existance():
-            if self.tourcreation.ask_user_to_save_input():
-                print("Adresse wird in datenbank gespeichert")
                 return True
-            else:
-                print("Speicherung abgebrochen")
-                return False
         else:
-            print("Diese Adresse existiert nicht")
+            self.logger.error("Die Adresse existiert nicht und wird nicht in die DB geschrieben")
             return False
     
     def write_tour_data_to_db(self):
@@ -107,12 +126,3 @@ if __name__ == "__main__":
 
     db_writer = DataWriter()
     db_writer.write_tour_data_to_db()
-
-
-
-
-
-
-
-
-

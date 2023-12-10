@@ -35,3 +35,10 @@
 - fixed DBConnector (fully working now)
 - restructured "log policy" meaning created new class for log management -> each function which writes into logfiles writ
 - deleted unnecessary code
+
+## 10.12.2023
+- replaced the user_inputs (TourCreation) by flask_app -> for the web application
+- constructed a check, that the same "Firmenname" doesnt get listed twice in the DB
+- restructured the folder
+- added TODO.md to track open To Do's
+- adapted the input_to_database file so the data comes from the flask app now, not anymore from the TourCreation

@@ -1,7 +1,10 @@
 from flask import Flask, request, render_template
 from input_to_database import DataWriter
 from db_connect_disconnect import DatabaseConnector
-from orm import Tour
+
+from orm import Tour  # Import your Tour model
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
 app = Flask(__name__)
 
@@ -29,6 +32,30 @@ def create_tour():
         db_writer.write_tour_data_to_db()
 
         return "Tour created successfully!"
+    
+@app.route('/tours')
+def display_tours():
+    try:
+        # Create an engine to connect to your database
+        engine = create_engine('postgresql://hp_admin:Nudelholz03#@localhost/hp_postgres')
+
+        # Create a session to interact with the database
+        Session = sessionmaker(bind=engine)
+        session = Session()
+
+        # Query the Tour table to fetch all tour data
+        tours = session.query(Tour).all()
+
+        # Close the session
+        session.close()
+
+        # Render a template and pass the fetched tour data to it
+        return render_template('tours.html', tours=tours)
+
+    except Exception as e:
+        return render_template('error.html', error=str(e))
+
+    
 
 if __name__ == '__main__':
     app.run(debug=True)

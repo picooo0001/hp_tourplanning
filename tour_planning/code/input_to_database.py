@@ -4,7 +4,6 @@ from user_input import TourCreation
 from background_checks import BackgroundChecks
 from log_config import LogConfig
 from sqlalchemy import and_
-from datetime import datetime
 
 class DataWriter:
     """Klasse zum Schreiben von Daten in die Datenbank.
@@ -39,12 +38,9 @@ class DataWriter:
 
     def create_db_entry(self):
         """Erstellt neue Einträge für Tour, Adresse und Kunde."""
-        date_obj = datetime.strptime(self.date, '%d/%m/%Y')
-        formatted_date = date_obj.strftime('%Y-%m-%d')
-
-        self.new_tour = Tour(date=formatted_date,
-                        #kolonne_type=self.kolonne,
-                        #private=self.private,
+        self.new_tour = Tour(date=self.date,
+                        kolonne_type=self.kolonne,
+                        private=self.private,
                         further_info=self.info)
         
         self.new_address = Address(strasse=self.strasse,

@@ -11,8 +11,8 @@ class Tour(Base):
     address_id = Column(SmallInteger, ForeignKey('address.address_id'))
     client_id = Column(SmallInteger, ForeignKey('client.client_id'))
     date = Column(Date)
-    kolonne_type = Column(Enum('Ferat', 'Driton', 'Argon', 'Benni', 'Bogdan', 'Ardian', 'Alin', 'Daniel', 'Sabit', 'Patriot', name='kolonne_enum'))
-    private = Column(Boolean)
+    kolonne_type = Column(VARCHAR(255))
+    private = Column(VARCHAR(225))
     further_info = Column(VARCHAR(255))
 
     def __repr__(self):

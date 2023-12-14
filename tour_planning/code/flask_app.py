@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
 from input_to_database import DataWriter
 from db_connect_disconnect import DatabaseConnector
 
@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('testseite.html')
+    return render_template('tourcreation.html')
 
 @app.route('/create_tour', methods=['POST'])
 def create_tour():
@@ -31,7 +31,10 @@ def create_tour():
         db_connector.get_session()
         db_writer.write_tour_data_to_db()
 
-        return "Tour created successfully!"
+        if db_writer:
+            return jsonify({'message': 'Tour successfully created!'})
+        else:
+            return jsonify({'message': 'Error creating tour!'}), 500
     
 @app.route('/tours')
 def display_tours():
@@ -54,7 +57,6 @@ def display_tours():
 
     except Exception as e:
         return render_template('error.html', error=str(e))
-
     
 
 if __name__ == '__main__':

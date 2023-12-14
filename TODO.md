@@ -1,8 +1,7 @@
 # To do's:
-    - Input Validation für Kolonne (Typ -> Dropdown Ui Selection)
-    - Input Validation für Private Auftraggeber (Typ -> Checkbox JA / NEIN)
     - Eintrag abschicken in DB (Typ -> Checkbox. Ja/Nein, True/False)
     - Display the tours to the user in web
+    - css stylen und anpassen -> einheitliches Design
     
 # User operations:
 -He should be able to change the date

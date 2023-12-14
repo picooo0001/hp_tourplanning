@@ -47,3 +47,4 @@
 - rewrote some code in py classes
 - created and designed the tourcreations.html
 - added responses without redirecting
+- finished the tourcreations.html

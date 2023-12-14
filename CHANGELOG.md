@@ -42,3 +42,8 @@
 - restructured the folder
 - added TODO.md to track open To Do's
 - adapted the input_to_database file so the data comes from the flask app now, not anymore from the TourCreation
+
+## 14.12.2023
+- rewrote some code in py classes
+- created and designed the tourcreations.html
+- added responses without redirecting

@@ -23,7 +23,7 @@
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
-          <a class="navbar-brand" href="#">HP Gerüstbau</a>
+          <a class="navbar-brand" href="https://www.hp-geruestbau.de/">HP Gerüstbau</a>
           <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
@@ -36,7 +36,7 @@
           </div>
         </div>
       </nav>
-    <div class="container-fluid">
+      <div class="container-fluid">
         <div class="d-flex justify-content-center align-items-center">
             <h1>Tour anlegen</h1>
         </div>
@@ -57,25 +57,23 @@
                     </div>
                 </div>
                 <div class="col-sm-4 col-md-4">
-                    <div class="row justify-content-center">
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                Kolonne
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <li><a class="dropdown-item" href="#" data-value="Kolonne A">Kolonne A</a></li>
-                                <li><a class="dropdown-item" href="#" data-value="Kolonne B">Kolonne B</a></li>
-                                <li><a class="dropdown-item" href="#" data-value="Kolonne C">Kolonne C</a></li>
-                            </ul>
-                        </div>
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                            Kolonne
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <li><a class="dropdown-item" href="#" data-value="Kolonne A" onclick="setSelectedValue('Kolonne A')">Kolonne A</a></li>
+                            <li><a class="dropdown-item" href="#" data-value="Kolonne B" onclick="setSelectedValue('Kolonne B')">Kolonne B</a></li>
+                            <li><a class="dropdown-item" href="#" data-value="Kolonne C" onclick="setSelectedValue('Kolonne C')">Kolonne C</a></li>
+                        </ul>
                         <!-- Ein verstecktes Input-Feld, um den ausgewählten Wert zu speichern -->
                         <input type="hidden" id="kolonne" name="kolonne">
                     </div>
-                    <!--<input type="text" id="kolonne" name="kolonne"><br><br>-->
                 </div>
+            </div>
             <div class="row g-3">
-                <div class="col-sm-8">
-                    <div class="form-floating mb-3">
+                <div class="col-sm-8 col-md-8">
+                    <div class="form-floating mb-3 mt-3">
                         <input type="text" class="form-control" id="strasse" name="strasse" placeholder=" " required>
                         <label for="strasse">Straße</label>
                     </div>
@@ -88,7 +86,7 @@
                 </div>
             </div>
             <div class="row g-3">
-                <div class="col-sm-8">
+                <div class="col-sm-8 col-md-8">
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" id="ort" name="ort" placeholder=" " required>
                         <label for="ort">Ort</label>
@@ -102,11 +100,11 @@
                 </div>        
             </div>
             <div class="row g-3">
-                <div class="col-sm-8 col-md-8">
+                <div class="col-sm-8 col-md-8 mb-3"> <!-- Zusätzliche Margin-Klasse hinzugefügt -->
                     <div class="form-floating">
                         <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea" name="info"></textarea>
                         <label for="floatingTextarea">Comments</label>
-                      </div>
+                    </div>
                 </div>
                 <div class="col-sm col-md">
                     <div class="form-check form-switch">
@@ -116,14 +114,16 @@
                     <!-- Ein verstecktes Input-Feld, um den Wert des Switches zu speichern -->
                     <input type="hidden" id="private" name="private" value="False">
                 </div>
+            </div>
+            <div class="row g-3 mt-3">
+                <div class="col-12 text-center">
+                    <button type="button" class="btn btn-success btn-lg me-3" onclick="createTour()">Tour erstellen</button>
+                    <button type="button" class="btn btn-danger btn-lg" onclick="deleteEntry()">Abbrechen</button>
                 </div>
             </div>
-            <div class="d-flex justify-content-center align-items-center">
-                <div>
-                    <button type="button" onclick="createTour()">Create Tour</button>
-                </div>
-             </div>
-        </form>
+            <div id="notification"></div>
+        </div>
+        </form> 
         <div id="notification"></div>
     </div>
     <script>
@@ -168,6 +168,28 @@
             };
             xhr.open("POST", "/create_tour", true);
             xhr.send(formData);
+        }
+    </script>
+    <script>
+        function deleteEntry() {
+            document.getElementById('firmenname').value = '';
+            document.getElementById('date').value = '';
+            document.getElementById('strasse').value = '';
+            document.getElementById('hausnr').value = '';
+            document.getElementById('ort').value = '';
+            document.getElementById('plz').value = '';
+            document.getElementById('floatingTextarea').value = '';
+            document.getElementById('date').value = '';
+            document.getElementById('dropdownMenuButton').innerText = 'Kolonne';
+            document.getElementById('kolonne').value = '';
+            document.getElementById('private_switch').checked = false;
+            document.getElementById('private').value = 'False'; 
+        }
+    </script>
+    <script>
+        function setSelectedValue(value) {
+            document.getElementById('kolonne').value = value;
+            document.getElementById('dropdownMenuButton').textContent = value;
         }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>

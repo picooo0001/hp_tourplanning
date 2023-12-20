@@ -48,3 +48,7 @@
 - created and designed the tourcreations.html
 - added responses without redirecting
 - finished the tourcreations.html
+
+## 20.12.2023
+- got calendar working
+- flask has now a route (get_tours) which displays the tours in a FullCalendar

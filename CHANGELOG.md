@@ -1,5 +1,5 @@
 # Changelog
-## 11.12.2023
+## 11.11.2023
 - setup git repo
 - started with simple backend logic
 
@@ -52,3 +52,7 @@
 ## 20.12.2023
 - got calendar working
 - flask has now a route (get_tours) which displays the tours in a FullCalendar
+
+## 22.12.2023 
+- started working on date drag and drop function. Works but date doesnt get updated in Database.
+- Updated few things on calendar

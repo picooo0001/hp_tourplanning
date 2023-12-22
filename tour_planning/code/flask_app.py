@@ -8,6 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import sessionmaker
 
 app = Flask(__name__)
+app.config['DEBUG'] = True
 
 db_connection = DatabaseConnector('postgresql://hp_admin:Nudelholz03#@localhost/hp_postgres')
 
@@ -78,6 +79,27 @@ def get_tours():
     except Exception as e:
         print("Fehler:", str(e))  # Hier kannst du den Fehler in der Konsole anzeigen
         return jsonify({'error': str(e)}), 500
+
+@app.route('/update_date', methods=['POST'])
+def update_date():
+    try:
+        db_session, connection_status = db_connection.get_session()
+        data = request.get_json()
+        tour_id = int(data.get('id'))
+        new_date = data.get('newDate')
+
+        tour = db_session.query(Tour).get(tour_id)
+        if tour:
+            tour.date = new_date
+            db_session.commit()
+            return jsonify({'message': 'Event wurde erfolgreich aktualisiert'})
+        else:
+            return jsonify({'error': 'Event nicht gefunden.'}), 404
+    
+    except Exception as e:
+        print("Fehler beim Aktualisieren des Events:", str(e))
+        return jsonify({'error': str(e)}), 500
+
 
     
 if __name__ == '__main__':

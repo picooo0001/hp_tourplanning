@@ -43,21 +43,21 @@
     </div>
     <div class="container">
         <form action="/create_tour" method="post" id="tourForm">
-            <div class="row g-3">
+            <div class="row g-3 align-items-start">
                 <div class="col-sm-4 col-md-4">
-                    <div class="form-floating mb-3">
+                    <div class="form-floating mb-3 mt-3">
                         <input type="text" class="form-control" id="firmenname" name="firmenname" placeholder=" " required>
                         <label for="firmenname">Firmenname</label>
                     </div>
                 </div>
                 <div class="col-sm-4 col-md-4">
-                    <div class="form-floating mb-3">
+                    <div class="form-floating mb-3 mt-3">
                         <input type="date" class="form-control" id="date" name="date" placeholder=" " required>
                         <label for="date">Datum</label>
                     </div>
                 </div>
-                <div class="col-md-2">
-                    <div class="dropdown">
+                <div class="col-sm-4 col-md-2">
+                    <div class="dropdown mb-3 mt-3">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="kolonneDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                             Kolonne
                         </button>
@@ -69,8 +69,8 @@
                         <input type="hidden" id="kolonne" name="kolonne">
                     </div>
                 </div>
-                <div class="col-md-2">
-                    <div class="dropdown">
+                <div class="col-sm-4 col-md-2">
+                    <div class="dropdown mb-3 mt-3">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="durationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                             Zeitbedarf
                         </button>
@@ -84,7 +84,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row g-3">
+            <div class="row g-3 align-items-start">
                 <div class="col-sm-8 col-md-8">
                     <div class="form-floating mb-3 mt-3">
                         <input type="text" class="form-control" id="strasse" name="strasse" placeholder=" " required>
@@ -92,35 +92,35 @@
                     </div>
                 </div>
                 <div class="col-sm-4">
-                    <div class="form-floating mb-3">
+                    <div class="form-floating mb-3 mt-3">
                         <input type="number" class="form-control" id="hausnr" name="hausnr" placeholder=" " required>
                         <label for="hausnr">Hausnummer</label>
                     </div>
                 </div>
             </div>
-            <div class="row g-3">
+            <div class="row g-3 align-items-start">
                 <div class="col-sm-8 col-md-8">
-                    <div class="form-floating mb-3">
+                    <div class="form-floating mb-3 mt-3">
                         <input type="text" class="form-control" id="ort" name="ort" placeholder=" " required>
                         <label for="ort">Ort</label>
                     </div>
                 </div>
                 <div class="col-sm-4">
-                    <div class="form-floating mb-3">
+                    <div class="form-floating mb-3 mt-3">
                         <input type="text" class="form-control" id="plz" name="plz" placeholder=" " required>
                         <label for="plz">Postleihzahl</label>
                     </div>
                 </div>        
             </div>
-            <div class="row g-3">
-                <div class="col-sm-8 col-md-8 mb-3"> <!-- Zusätzliche Margin-Klasse hinzugefügt -->
+            <div class="row g-3 align-items-start">
+                <div class="col-sm-8 col-md-8 mb-3 mt-3"> <!-- Zusätzliche Margin-Klasse hinzugefügt -->
                     <div class="form-floating">
                         <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea" name="info"></textarea>
                         <label for="floatingTextarea">Comments</label>
                     </div>
                 </div>
                 <div class="col-sm col-md">
-                    <div class="form-check form-switch">
+                    <div class="form-check form-switch mt-3 mb-3">
                         <input class="form-check-input" type="checkbox" role="switch" id="private_switch" name="private_switch">
                         <label class="form-check-label" for="private">Privater Auftraggeber?</label>
                     </div>
@@ -128,7 +128,7 @@
                     <input type="hidden" id="private" name="private" value="False">
                 </div>
             </div>
-            <div class="row g-3 mt-3">
+            <div class="row g-3 mt-3 align-items-start">
                 <div class="col-12 text-center">
                     <button type="button" class="btn btn-success btn-lg me-3" onclick="createTour()">Tour erstellen</button>
                     <button type="button" class="btn btn-danger btn-lg" onclick="deleteEntry()">Abbrechen</button>

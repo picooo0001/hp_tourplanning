@@ -1,4 +1,4 @@
-from sqlalchemy import ForeignKey,Column, VARCHAR, Date, Boolean, Enum, SmallInteger, Sequence, Integer
+from sqlalchemy import ForeignKey,Column, VARCHAR, Date, Boolean, Enum, SmallInteger, Sequence, Integer, Numeric
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -14,6 +14,7 @@ class Tour(Base):
     kolonne_type = Column(VARCHAR(255))
     private = Column(VARCHAR(225))
     further_info = Column(VARCHAR(255))
+    zeitbedarf = Column(Numeric(2,1))
 
     def __repr__(self):
         """Gibt eine lesbare Repräsentation der Tour-Tabelle zurück."""

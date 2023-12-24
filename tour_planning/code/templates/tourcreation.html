@@ -56,18 +56,31 @@
                         <label for="date">Datum</label>
                     </div>
                 </div>
-                <div class="col-sm-4 col-md-4">
+                <div class="col-md-2">
                     <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="kolonneDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                             Kolonne
                         </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <ul class="dropdown-menu" aria-labelledby="kolonneDropdown">
                             <li><a class="dropdown-item" href="#" data-value="Kolonne A" onclick="setSelectedValue('Kolonne A')">Kolonne A</a></li>
                             <li><a class="dropdown-item" href="#" data-value="Kolonne B" onclick="setSelectedValue('Kolonne B')">Kolonne B</a></li>
                             <li><a class="dropdown-item" href="#" data-value="Kolonne C" onclick="setSelectedValue('Kolonne C')">Kolonne C</a></li>
                         </ul>
-                        <!-- Ein verstecktes Input-Feld, um den ausgewählten Wert zu speichern -->
                         <input type="hidden" id="kolonne" name="kolonne">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="durationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            Zeitbedarf
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="durationDropdown">
+                            <li><a class="dropdown-item" href="#" data-value="1" onclick="setSelectedDuration('1.0')">Ganzer Tag</a></li>
+                            <li><a class="dropdown-item" href="#" data-value="0.75" onclick="setSelectedDuration('0.75')">Dreiviertel Tag</a></li> 
+                            <li><a class="dropdown-item" href="#" data-value="0.5" onclick="setSelectedDuration('0.5')">Halber Tag</a></li> 
+                            <li><a class="dropdown-item" href="#" data-value="0.25" onclick="setSelectedDuration('0.25')">Viertel Tag</a></li>  
+                        </ul>
+                        <input type="hidden" id="zeitbedarf" name="zeitbedarf">
                     </div>
                 </div>
             </div>
@@ -127,17 +140,27 @@
         <div id="notification"></div>
     </div>
     <script>
-        // Das JavaScript, um den ausgewählten Wert des Dropdown-Menüs zu speichern
-        document.addEventListener("DOMContentLoaded", function() {
-            let dropdownItems = document.querySelectorAll('.dropdown-item');
-    
-            dropdownItems.forEach(function(item) {
+       document.addEventListener("DOMContentLoaded", function() {
+            let kolonneDropdownItems = document.querySelectorAll('#kolonneDropdown .dropdown-item');
+
+            kolonneDropdownItems.forEach(function(item) {
                 item.addEventListener('click', function() {
-                    let selectedValue = this.getAttribute('data-value');
-                    document.getElementById('kolonne').value = selectedValue;
+                    let selectedKolonneValue = this.getAttribute('data-value');
+                    document.getElementById('kolonne').value = selectedKolonneValue;
+                    document.getElementById('kolonneDropdown').textContent = selectedKolonneValue;
                 });
             });
-        });
+
+            let durationDropdownItems = document.querySelectorAll('#durationDropdown .dropdown-item');
+
+            durationDropdownItems.forEach(function(item) {
+                item.addEventListener('click', function() {
+                    let selectedDurationValue = this.getAttribute('data-value');
+                    document.getElementById('zeitbedarf').value = selectedDurationValue;
+                    document.getElementById('durationDropdown').textContent = selectedDurationValue; // Änderung: Zeigt die Zahl an
+                });
+            });
+       });
     </script>
     <script>
         // Das JavaScript, um den Status des Switches zu speichern
@@ -180,16 +203,22 @@
             document.getElementById('plz').value = '';
             document.getElementById('floatingTextarea').value = '';
             document.getElementById('date').value = '';
-            document.getElementById('dropdownMenuButton').innerText = 'Kolonne';
+            document.getElementById('kolonneDropdown').innerText = 'Kolonne';
+            document.getElementById('durationDropdown').innerText = 'Zeitbedarf';
             document.getElementById('kolonne').value = '';
             document.getElementById('private_switch').checked = false;
             document.getElementById('private').value = 'False'; 
         }
     </script>
     <script>
-        function setSelectedValue(value) {
-            document.getElementById('kolonne').value = value;
-            document.getElementById('dropdownMenuButton').textContent = value;
+        function setSelectedValue(kolonneValue) {
+            document.getElementById('kolonne').value = kolonneValue;
+            document.getElementById('kolonneDropdown').textContent = kolonneValue;
+        }
+
+        function setSelectedDuration(zeitbedarfValue) {
+            document.getElementById('zeitbedarf').value = zeitbedarfValue;
+            document.getElementById('durationDropdown').textContent = zeitbedarfValue;
         }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>

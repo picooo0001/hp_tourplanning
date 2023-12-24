@@ -2,7 +2,7 @@ from flask import Flask, request, render_template, jsonify
 from input_to_database import DataWriter
 from orm import Tour, Address, Client
 from db_connect_disconnect import DatabaseConnector
-from datetime import datetime
+from datetime import datetime, timedelta, time
 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import sessionmaker
@@ -14,7 +14,7 @@ db_connection = DatabaseConnector('postgresql://hp_admin:Nudelholz03#@localhost/
 
 @app.route('/')
 def index():
-    return render_template('tourcreation.html')
+    return render_template('tours.html')
 
 @app.route('/create_tour', methods=['POST'])
 def create_tour():
@@ -63,11 +63,30 @@ def get_tours():
 
         formatted_tours = []
         for tour, address, client in events:
+
+            kolonne_color_map = {
+                'Kolonne A': 'red',
+                'Kolonne B': 'green',
+                # Weitere Kolonnen und deren Farben
+            }
+
+            kolonne = tour.kolonne_type  # Annahme: Die Eigenschaft, die die Kolonne angibt
+            event_color = kolonne_color_map.get(kolonne, 'blue')
+
+            event_date = tour.date
+            event_start = datetime.combine(event_date, time(7,0,0))
+            event_duration = float(tour.zeitbedarf) if tour.zeitbedarf is not None else 1.0
+            event_end = event_start + timedelta(hours=event_duration * 8)
+            
             formatted_tours.append({
-                'title': f"{tour.kolonne_type} - {client.firmenname}",
-                'start': tour.date.isoformat(),  # Datumsformat anpassen
+                'title': f"{kolonne} - {client.firmenname}",
+                'start': event_start.isoformat(),
+                'end': event_end.isoformat(),
+                'allDay': False,
+                'backgroundColor': event_color,
                 'description': f"Address: {address.strasse} {address.hausnr}, {address.plz} {address.ort}. Further Info: {tour.further_info}"
             })
+
 
         # Verbindung zur Datenbank schließen
         close_status, close_message = db_connection.close_connection()

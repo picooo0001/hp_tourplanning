@@ -56,3 +56,8 @@
 ## 22.12.2023 
 - started working on date drag and drop function. Works but date doesnt get updated in Database.
 - Updated few things on calendar
+
+## 24.12.2023
+- added "zeitbedard" in tourcreation and updated database / database model etc.
+- added "zeitbedarf" to flask route so the events have a specified length (there have always been all-day)
+- customized the calendar

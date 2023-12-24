@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,28 +9,20 @@
     <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css' rel='stylesheet'>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
   </head>
-  <body>
+  <body style="background-color: #222; color: white;">
       <h1 class="text-center mb-4">Tour Kalender</h1>
       <div id="calendar"></div>
     <script>
       document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
-        
         var calendar = new FullCalendar.Calendar(calendarEl, {
+          locale: 'de',
           initialView: 'timeGridWeek', // Anzeige auf eine Woche ändern
           themeSystem: 'bootstrap5',
           windowResize: true,
           hiddenDays: [0],
-          businessHours: [{
-            daysOfWeek: [1,2,3,4,5],
-            startTime: '7:00',
-            endTime: '17:00'
-          },
-          {
-            daysOfWeek: [6],
-            startTime: '8:00',
-            endTime: '15:00'
-          }],
+          slotMinTiem: '07:00:00',
+          slotMaxTime: '17:30:00',
           editable: true,
           eventDrop: function(info) {
             var eventID = info.event.id;
@@ -68,7 +60,9 @@
             return {
               html: '<b>' + arg.event.title + '</b>' + '<br>' + arg.event.extendedProps.description
             };
-          }
+          },
+          eventDisplay: 'block',
+          displayEventTime: true
         });
           calendar.render();
         });

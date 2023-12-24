@@ -17,7 +17,7 @@ class DataWriter:
         logger: Der Logger für das Schreiben von Logmeldungen.
     """
 
-    def __init__(self, date, kolonne, strasse, hausnr, plz, ort, firmenname, info, private):
+    def __init__(self, date, kolonne, strasse, hausnr, plz, ort, firmenname, info, private, zeitbedarf):
         """Initialisiert die DataWriter-Klasse."""
         self.db_connector = DatabaseConnector('postgresql://hp_admin:Nudelholz03#@localhost/hp_postgres')
         self.session, _ = self.db_connector.get_session()
@@ -34,6 +34,7 @@ class DataWriter:
         self.firmenname = firmenname
         self.info = info
         self.private = private
+        self.zeitbedarf = zeitbedarf
 
 
     def create_db_entry(self):
@@ -41,7 +42,8 @@ class DataWriter:
         self.new_tour = Tour(date=self.date,
                         kolonne_type=self.kolonne,
                         private=self.private,
-                        further_info=self.info)
+                        further_info=self.info,
+                        zeitbedarf = self.zeitbedarf)
         
         self.new_address = Address(strasse=self.strasse,
                               hausnr=self.hausnr,

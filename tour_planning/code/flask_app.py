@@ -14,7 +14,7 @@ db_connection = DatabaseConnector('postgresql://hp_admin:Nudelholz03#@localhost/
 
 @app.route('/')
 def index():
-    return render_template('tours.html')
+    return render_template('tourcreation.html')
 
 @app.route('/create_tour', methods=['POST'])
 def create_tour():
@@ -29,8 +29,9 @@ def create_tour():
         firmenname = request.form['firmenname']
         info = request.form['info']
         private = request.form['private']
+        zeitbedarf = request.form['zeitbedarf']
 
-        db_writer = DataWriter(date, kolonne, strasse, hausnr, plz, ort, firmenname, info, private)
+        db_writer = DataWriter(date, kolonne, strasse, hausnr, plz, ort, firmenname, info, private, zeitbedarf)
         db_connector = DatabaseConnector('postgresql://hp_admin:Nudelholz03#@localhost/hp_postgres')
         db_connector.get_session()
         db_writer.write_tour_data_to_db()

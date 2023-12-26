@@ -61,3 +61,8 @@
 - added "zeitbedard" in tourcreation and updated database / database model etc.
 - added "zeitbedarf" to flask route so the events have a specified length (there have always been all-day)
 - customized the calendar
+
+## 26.12.2023
+- added popup to tourcreation (success/fail)
+- updated calendar: day view, week view, for an better overview
+- adapted some other things like start end time and how the events get displayed

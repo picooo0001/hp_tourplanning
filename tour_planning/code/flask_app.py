@@ -7,14 +7,13 @@ from datetime import datetime, timedelta, time
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import sessionmaker
 
-app = Flask(__name__)
-app.config['DEBUG'] = True
+app = Flask(__name__, static_folder='static')
 
 db_connection = DatabaseConnector('postgresql://hp_admin:Nudelholz03#@localhost/hp_postgres')
 
 @app.route('/')
 def index():
-    return render_template('tours.html')
+    return render_template('tourcreation.html')
 
 @app.route('/create_tour', methods=['POST'])
 def create_tour():
@@ -79,12 +78,12 @@ def get_tours():
             event_end = event_start + timedelta(hours=event_duration * 8)
             
             formatted_tours.append({
-                'title': f"{kolonne} - {client.firmenname}",
+                'title': f"{kolonne}",
                 'start': event_start.isoformat(),
                 'end': event_end.isoformat(),
                 'allDay': False,
                 'backgroundColor': event_color,
-                'description': f"Address: {address.strasse} {address.hausnr}, {address.plz} {address.ort}. Further Info: {tour.further_info}"
+                'description': f"{client.firmenname} <br> {address.strasse} {address.hausnr} <br> {address.ort} <br> {address.plz} <br> {tour.further_info}"
             })
 
 

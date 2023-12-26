@@ -1,0 +1,29 @@
+/* Stil für Erfolgsmeldungen */
+.alert-success {
+  position: fixed;
+  bottom: 0px; /* Ändere den Wert hier, um die Höhe anzupassen */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  max-width: 80%; /* Maximale Breite des Kästchens */
+  text-align: center;
+  z-index: 1000;
+}
+
+/* Stil für Fehlermeldungen */
+.alert-danger {
+  position: fixed;
+  bottom: 0px; /* Ändere den Wert hier, um die Höhe anzupassen */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #FF0000;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  max-width: 80%; /* Maximale Breite des Kästchens */
+  text-align: center;
+  z-index: 1000;
+}

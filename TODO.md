@@ -1,5 +1,4 @@
 # To do's:
-    - tour creation (einträge nach erstellung löschen, success message nur kruz anzeigen)
     - customizing the calendar (dragndrop events mit update und besseres anzeigen der touren. navbar wie in tourcreation)
     - css stylen und anpassen -> einheitliches Design
 

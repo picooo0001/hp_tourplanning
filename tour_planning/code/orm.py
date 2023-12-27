@@ -1,5 +1,8 @@
-from sqlalchemy import ForeignKey,Column, VARCHAR, Date, Boolean, Enum, SmallInteger, Sequence, Integer, Numeric
+from sqlalchemy import ForeignKey,Column, VARCHAR, Date, SmallInteger,Integer, Numeric
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
+
+
 
 Base = declarative_base()
 
@@ -15,6 +18,8 @@ class Tour(Base):
     private = Column(VARCHAR(225))
     further_info = Column(VARCHAR(255))
     zeitbedarf = Column(Numeric(3,2))
+
+    client = relationship("Client", back_populates="tours")
 
     def __repr__(self):
         """Gibt eine lesbare Repräsentation der Tour-Tabelle zurück."""
@@ -36,3 +41,6 @@ class Client(Base):
 
     client_id = Column(Integer, primary_key=True, autoincrement=True)
     firmenname = Column(VARCHAR(255))
+    
+    tours = relationship("Tour", back_populates="client")
+

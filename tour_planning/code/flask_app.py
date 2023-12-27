@@ -3,9 +3,12 @@ from input_to_database import DataWriter
 from orm import Tour, Address, Client
 from db_connect_disconnect import DatabaseConnector
 from datetime import datetime, timedelta, time
+from sqlalchemy.orm import class_mapper, joinedload
 
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import sessionmaker
+def to_dict(model):
+    """Konvertiert eine SQLAlchemy-Instanz in ein JSON-serialisierbares Dictionary."""
+    columns = [str(c).split('.')[1] for c in model.__table__.columns]
+    return dict((c, getattr(model, c)) for c in columns)
 
 app = Flask(__name__, static_folder='static')
 
@@ -13,7 +16,7 @@ db_connection = DatabaseConnector('postgresql://hp_admin:Nudelholz03#@localhost/
 
 @app.route('/')
 def index():
-    return render_template('tourcreation.html')
+    return render_template('tours.html')
 
 @app.route('/create_tour', methods=['POST'])
 def create_tour():
@@ -78,6 +81,7 @@ def get_tours():
             event_end = event_start + timedelta(hours=event_duration * 8)
             
             formatted_tours.append({
+                'id': tour.tour_id,
                 'title': f"{kolonne}",
                 'start': event_start.isoformat(),
                 'end': event_end.isoformat(),
@@ -98,28 +102,76 @@ def get_tours():
     except Exception as e:
         print("Fehler:", str(e))  # Hier kannst du den Fehler in der Konsole anzeigen
         return jsonify({'error': str(e)}), 500
+    
+@app.route('/show_tours', methods=['GET'])
+def show_tours():
+    db_session, connection_status = db_connection.get_session()
+    tours = db_session.query(Tour).options(joinedload(Tour.client)).all()
+    serialized_tours = [
+        {
+            'tour_id': tour.tour_id,
+            'date': tour.date,
+            'kolonne_type': tour.kolonne_type,
+            'firmenname': tour.client.firmenname if tour.client else None
+        }
+        for tour in tours
+    ]
+    return jsonify(serialized_tours)
 
-@app.route('/update_date', methods=['POST'])
-def update_date():
+@app.route('/delete_tour/<int:tour_id>', methods=['DELETE'])
+def delete_tour(tour_id):
     try:
         db_session, connection_status = db_connection.get_session()
-        data = request.get_json()
-        tour_id = int(data.get('id'))
+
+        # Suche die Tour anhand der ID
+        tour_to_delete = db_session.query(Tour).filter_by(tour_id=tour_id).first()
+
+        if tour_to_delete:
+            # Lösche die Tour
+            db_session.delete(tour_to_delete)
+            db_session.commit()
+
+            return jsonify({'message': f'Tour mit ID {tour_id} wurde erfolgreich gelöscht.'}), 200
+        else:
+            return jsonify({'error': f'Tour mit ID {tour_id} nicht gefunden.'}), 404
+    
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+@app.route('/change_kolonne/<int:tour_id>/<new_kolonne>', methods=['PUT'])
+def change_kolonne(tour_id, new_kolonne):
+    try:
+        db_session, connection_status = db_connection.get_session()
+
+        tour = db_session.query(Tour).filter_by(tour_id=tour_id).first()
+        if tour:
+            tour.kolonne_type = new_kolonne
+            db_session.commit()
+            return jsonify({'message': f'Kolonne für Tour {tour_id} erfolgreich geändert'})
+        else:
+            return jsonify({'error': f'Tour mit ID {tour_id} nicht gefunden'}), 404
+    except Exception as e:
+        print("Fehler:", str(e))
+        return jsonify({'error': str(e)}), 500
+    
+@app.route('/update_date/<int:eventID>', methods=['POST'])
+def update_date(eventID):
+    try: 
+        data = request.json
         new_date = data.get('newDate')
 
-        tour = db_session.query(Tour).get(tour_id)
+        db_session, connection_status = db_connection.get_session()
+
+        tour = db_session.query(Tour).filter_by(tour_id=eventID).first()
         if tour:
             tour.date = new_date
             db_session.commit()
-            return jsonify({'message': 'Event wurde erfolgreich aktualisiert'})
+            return jsonify({'message': 'Tourdatum erfolgreich aktualisiert'})
         else:
-            return jsonify({'error': 'Event nicht gefunden.'}), 404
-    
+            return jsonify({'error': 'Tour nicht gefunden'}), 404
+
     except Exception as e:
-        print("Fehler beim Aktualisieren des Events:", str(e))
         return jsonify({'error': str(e)}), 500
 
-
-    
 if __name__ == '__main__':
     app.run(debug=True)

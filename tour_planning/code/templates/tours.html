@@ -24,11 +24,14 @@
               <li class="nav-item">
                 <a class="nav-link" href="#">Tour erstellen</a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Toureinträge ändern</a>
+              </li>
             </ul>
           </div>
         </div>
       </nav>
-    <div class="container-fluid">
+    <div class="container-fluid mt-3 mb-3">
       <div class="d-flex justify-content-center align-items-center">
           <h1>Tour Kalender</h1>
       </div>
@@ -55,15 +58,15 @@
           editable: true,
           eventDrop: function(info) {
             var eventID = info.event.id;
+            console.log('Tour ID:', eventID);
             var newDate = info.event.start;
-            console.log(info.event.id)
 
-            fetch('/update_date', {
+            fetch(`/update_date/`+ eventID, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify({ id: eventID, newDate: newDate })
+              body: JSON.stringify({ newDate: newDate })
             })
             .then(response => response.json())
             .then(data => {

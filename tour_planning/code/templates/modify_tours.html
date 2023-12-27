@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toureinträge bearbeiten</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <a class="navbar-brand" href="https://www.hp-geruestbau.de/">HP Gerüstbau</a>
+          <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Toureinträge bearbeiten</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Tour Kalender</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Tour erstellen</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+    </nav>
+    <div class="container-fluid mt-3 mb-3">
+        <div class="d-flex justify-content-center align-items-center">
+            <h1>Toureinträge bearbeiten</h1>
+        </div>
+    </div>
+    <div class="container">
+        <ul class="list-group" id="tour-list">
+            <!-- Hier werden die Touren eingefügt -->
+        </ul>
+    </div>
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- JavaScript zum Anzeigen der Touren -->
+    <script>
+        // JavaScript, um die Touren anzuzeigen
+        fetch('/show_tours') // Routenaufruf
+            .then(response => response.json()) // Konvertiere die Antwort in JSON
+            .then(data => {
+                const tourList = document.getElementById('tour-list'); // UL-Element
+                data.forEach(tour => {
+                    const listItem = document.createElement('li'); // Erstelle LI-Element
+                    listItem.classList.add('list-group-item'); // Füge Bootstrap-Klasse hinzu
+                    listItem.innerHTML = `ID: ${tour.tour_id} | Datum: ${tour.date} | Firmenname: ${tour.firmenname} | Kolonne: ${tour.kolonne_type}
+                    <button onclick="deleteTour(${tour.tour_id})">Tour löschen</button> 
+                    <div class="kolonne-dropdown-${tour.tour_id}">
+                        <select id="kolonneSelect-${tour.tour_id}" style="display: none;">
+                            <option value="Kolonne A">Kolonne A</option>
+                            <option value="Kolonne B">Kolonne B</option>
+                            <option value="Kolonne C">Kolonne C</option>
+                        </select>
+                        <button onclick="toggleKolonneDropdown(${tour.tour_id})">Kolonne ändern</button>
+                        <button onclick="changeKolonne(${tour.tour_id})" style="display: none;">Ändern</button>
+                    </div>`;
+                    tourList.appendChild(listItem); // Füge das LI-Element der UL-Liste hinzu
+                });
+            })
+            .catch(error => console.error('Error:', error)); // Fehlerbehandlung
+    </script>
+    <script>
+        function deleteTour(tourId) {
+        fetch(`/delete_tour/${tourId}`, {
+            method: 'DELETE'
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data); // Hier könntest du Feedback an den Benutzer geben
+            // Möglicherweise die Tour aus der Liste entfernen und die Ansicht aktualisieren
+        })
+        .catch(error => console.error('Error:', error));
+    }
+    </script>
+    <script>
+        function openKolonneModal(tourId, currentKolonne) {
+            // Hier öffnest du ein Dropdown-Menü für die Kolonnenauswahl
+            const dropdownHTML = `
+                <select id="kolonneSelect">
+                    <option value="Kolonne A">Kolonne A</option>
+                    <option value="Kolonne B">Kolonne B</option>
+                    <option value="Kolonne C">Kolonne C</option>
+                </select>
+                <button onclick="changeKolonne(${tourId})">Ändern</button>`;
+
+            // Erstelle ein neues div-Element, um das Dropdown-Menü anzuzeigen
+            const dropdownContainer = document.createElement('div');
+            dropdownContainer.innerHTML = dropdownHTML;
+
+            // Füge das Dropdown-Menü in das Dokument hinzu
+            document.body.appendChild(dropdownContainer);
+        }
+    </script>
+    <script>
+        function toggleKolonneDropdown(tourId) {
+        const kolonneDropdown = document.getElementById(`kolonneSelect-${tourId}`);
+        const changeButton = document.querySelector(`.kolonne-dropdown-${tourId} button:nth-child(2)`);
+        const applyButton = document.querySelector(`.kolonne-dropdown-${tourId} button:nth-child(3)`);
+
+        kolonneDropdown.style.display = kolonneDropdown.style.display === 'none' ? 'block' : 'none';
+        changeButton.style.display = changeButton.style.display === 'none' ? 'block' : 'none';
+        applyButton.style.display = applyButton.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function changeKolonne(tourId) {
+        const selectedKolonne = document.getElementById(`kolonneSelect-${tourId}`).value;
+
+        fetch(`/change_kolonne/${tourId}/${selectedKolonne}`, { method: 'PUT' })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                // Hier könntest du eine Rückmeldung anzeigen oder die Liste neu laden
+            })
+            .catch(error => console.error('Error:', error));
+    }
+    </script>
+</body>
+</html>

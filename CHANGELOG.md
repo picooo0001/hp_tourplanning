@@ -66,3 +66,9 @@
 - added popup to tourcreation (success/fail)
 - updated calendar: day view, week view, for an better overview
 - adapted some other things like start end time and how the events get displayed
+
+## 27.12.2923
+- created modify_tours (site where the user can modify the tours)
+- created a tour list inside the modify_tours file
+- created delete and change kolonne button for the list
+- implemented drag n drop function in the calendar so user can change the date by dragging and dropping 

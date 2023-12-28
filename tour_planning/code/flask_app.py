@@ -1,9 +1,19 @@
-from flask import Flask, request, render_template, jsonify, send_from_directory
+from flask import Flask, session, redirect, url_for, request, render_template, jsonify, send_from_directory
 from input_to_database import DataWriter
-from orm import Tour, Address, Client
+from orm import Tour, Address, Client, User
 from db_connect_disconnect import DatabaseConnector
 from datetime import datetime, timedelta, time
+from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import class_mapper, joinedload
+from functools import wraps
+
+def login_required(route_function):
+    @wraps(route_function)
+    def decorated_function(*args, **kwargs):
+        if 'logged_in' not in session:  # 'logged_in' ist ein fiktives Beispiel
+            return redirect(url_for('index'))  # Hier wird auf die Login-Seite weitergeleitet, wenn der Benutzer nicht angemeldet ist
+        return route_function(*args, **kwargs)
+    return decorated_function
 
 def to_dict(model):
     """Konvertiert eine SQLAlchemy-Instanz in ein JSON-serialisierbares Dictionary."""
@@ -11,18 +21,48 @@ def to_dict(model):
     return dict((c, getattr(model, c)) for c in columns)
 
 app = Flask(__name__, static_folder='static')
+app.secret_key = 'supersecretkey'
 
 db_connection = DatabaseConnector('postgresql://hp_admin:Nudelholz03#@localhost/hp_postgres')
+
+@app.route('/')
+def index():
+    print(session)
+    return render_template('login_page.html')
 
 @app.route('/<path:filename>')
 def send_html(filename):
     return send_from_directory('templates', filename)
 
-@app.route('/')
-def index():
-    return render_template('modify_tours.html')
+@app.route('/login', methods=['POST'])
+def login():
+    
+    data = request.json
+    username = data.get('username')
+    password = data.get('password')
+
+    db_session, connection_status = db_connection.get_session()
+
+    user = db_session.query(User).filter_by(username=username).first()
+
+    if user and check_password_hash(user.password_hash, password):
+        session['logged_in'] = True
+        print(session)
+        return jsonify({'message': 'Anmeldung erfolgreich'}),200
+    else:
+        #password = 'password'
+        #hashed_password = generate_password_hash(password)
+        #print(hashed_password)
+        return jsonify({'message': 'Ungültige Anmeldeinformationen'}), 401
+
+@app.route('/logout')
+def logout():
+    session.pop('logged_in', None)
+    print(session)
+    return redirect(url_for('index'))
 
 @app.route('/create_tour', methods=['POST'])
+@login_required
 def create_tour():
     if request.method == 'POST':
         # Daten aus dem Formular abrufen
@@ -49,6 +89,7 @@ def create_tour():
 
 
 @app.route('/get_tours', methods=['GET'])
+@login_required
 def get_tours():
     try:
         start_date_str = request.args.get('start')  # Nur das Startdatum als String aus der URL abrufen
@@ -107,6 +148,7 @@ def get_tours():
         return jsonify({'error': str(e)}), 500
     
 @app.route('/show_tours', methods=['GET'])
+@login_required
 def show_tours():
     db_session, connection_status = db_connection.get_session()
     tours = db_session.query(Tour).options(joinedload(Tour.client), joinedload(Tour.address)).all()
@@ -126,6 +168,7 @@ def show_tours():
     return jsonify(serialized_tours)
 
 @app.route('/delete_tour/<int:tour_id>', methods=['DELETE'])
+@login_required
 def delete_tour(tour_id):
     try:
         db_session, connection_status = db_connection.get_session()
@@ -146,6 +189,7 @@ def delete_tour(tour_id):
         return jsonify({'error': str(e)}), 500
     
 @app.route('/change_kolonne/<int:tour_id>/<new_kolonne>', methods=['PUT'])
+@login_required
 def change_kolonne(tour_id, new_kolonne):
     try:
         db_session, connection_status = db_connection.get_session()
@@ -162,6 +206,7 @@ def change_kolonne(tour_id, new_kolonne):
         return jsonify({'error': str(e)}), 500
     
 @app.route('/update_date/<int:eventID>', methods=['POST'])
+@login_required
 def update_date(eventID):
     try: 
         data = request.json
@@ -181,6 +226,7 @@ def update_date(eventID):
         return jsonify({'error': str(e)}), 500
     
 @app.route('/change_address/<int:tour_id>', methods=['PUT'])
+@login_required
 def change_address(tour_id):
     try:
         data = request.json

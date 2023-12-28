@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anmelden</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="text-center">
+    <form class="form-signin" onsubmit="loginUser(); return false;">
+        <img class="mb-4" src="data:image/jpeg;base64,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" alt width="72" height="72">
+        <h1 class="h3 mb-3 font-weight-normal">Bitte hier anmelden:</h1>
+        <label for="inputUsername" class="sr-only">Nutzername</label>
+        <input type="text" id="inputUsername" class="form-control" placeholder="Nutzername" required autofocus>
+        <label for="inputPassword" class="sr-only">Passwort</label>
+        <input type="password" id="inputPassword" class="form-control" placeholder="Passwort" required>
+        <button class="btn btn-lg btn-success btn-block" type="submit">Einloggen</button>
+    </form>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function loginUser() {
+            const username = document.getElementById('inputUsername').value;
+            const password = document.getElementById('inputPassword').value;
+
+            fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password }),
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Weiterleitung oder andere Aktionen bei erfolgreicher Anmeldung
+                    window.location.href = '/tourcreation.html'; // Beispiel: Weiterleitung zum Dashboard
+                } else {
+                    // Fehlerbehandlung bei fehlgeschlagener Anmeldung
+                    console.error('Anmeldung fehlgeschlagen');
+                }
+            })
+            .catch(error => {
+                console.error('Fehler beim Senden der Anmeldedaten:', error);
+            });
+        }
+    </script>
+</body>
+</html>

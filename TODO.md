@@ -1,6 +1,7 @@
 # To do's:
-    - [ ] Login Page
+    - [ ] Popup bei falschen Login Daten
     - [ ] Kalender bearbeiten (vierteltagsevents und zusätzliche Info)
+    
     - [ ] Hosting / Server
     - [ ] Beschreibungen im Code
     - [ ] Beschreibungs file, das Vorgehen Herausforderungen etc erklärt

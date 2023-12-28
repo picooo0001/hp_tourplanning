@@ -78,3 +78,7 @@
 - adapted the database model for adress (now the adress shows up as well in modify_tours list)
 - prettied up the code of modify_tours with bootstrap
 - linked up the different html sites amongst each other
+- added Login Page with login logic (user / hashed pw is stored in db) - access thourgh flask route
+- added logout function - in navbar of each site
+- added protection to the sites meaning that you cant see content / send content without signing in
+- added new table for user auth in db (adaptedt database model as well)

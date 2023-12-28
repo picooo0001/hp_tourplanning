@@ -1,4 +1,4 @@
-from sqlalchemy import ForeignKey,Column, VARCHAR, Date, SmallInteger,Integer, Numeric
+from sqlalchemy import String, ForeignKey ,Column, VARCHAR, Date, SmallInteger,Integer, Numeric, TIMESTAMP
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
@@ -45,4 +45,13 @@ class Client(Base):
     firmenname = Column(VARCHAR(255))
     
     tours = relationship("Tour")
+
+class User(Base):
+    """Tabelle für Login Daten"""
+    __tablename__ = 'users'
+
+    id = Column(Integer, primary_key=True)
+    username = Column(String(50), unique=True, nullable=False)
+    password_hash = Column(String(200), nullable=False)
+
 

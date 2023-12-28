@@ -20,6 +20,8 @@ class Tour(Base):
     zeitbedarf = Column(Numeric(3,2))
 
     client = relationship("Client", back_populates="tours")
+    address = relationship("Address")
+
 
     def __repr__(self):
         """Gibt eine lesbare Repräsentation der Tour-Tabelle zurück."""
@@ -42,5 +44,5 @@ class Client(Base):
     client_id = Column(Integer, primary_key=True, autoincrement=True)
     firmenname = Column(VARCHAR(255))
     
-    tours = relationship("Tour", back_populates="client")
+    tours = relationship("Tour")
 

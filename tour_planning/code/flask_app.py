@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, jsonify
+from flask import Flask, request, render_template, jsonify, send_from_directory
 from input_to_database import DataWriter
 from orm import Tour, Address, Client
 from db_connect_disconnect import DatabaseConnector
@@ -14,9 +14,13 @@ app = Flask(__name__, static_folder='static')
 
 db_connection = DatabaseConnector('postgresql://hp_admin:Nudelholz03#@localhost/hp_postgres')
 
+@app.route('/<path:filename>')
+def send_html(filename):
+    return send_from_directory('templates', filename)
+
 @app.route('/')
 def index():
-    return render_template('tours.html')
+    return render_template('modify_tours.html')
 
 @app.route('/create_tour', methods=['POST'])
 def create_tour():
@@ -90,7 +94,6 @@ def get_tours():
                 'description': f"{client.firmenname} <br> {address.strasse} {address.hausnr} <br> {address.ort} <br> {address.plz} <br> {tour.further_info}"
             })
 
-
         # Verbindung zur Datenbank schließen
         close_status, close_message = db_connection.close_connection()
         if not close_status:
@@ -106,13 +109,17 @@ def get_tours():
 @app.route('/show_tours', methods=['GET'])
 def show_tours():
     db_session, connection_status = db_connection.get_session()
-    tours = db_session.query(Tour).options(joinedload(Tour.client)).all()
+    tours = db_session.query(Tour).options(joinedload(Tour.client), joinedload(Tour.address)).all()
     serialized_tours = [
         {
             'tour_id': tour.tour_id,
             'date': tour.date,
             'kolonne_type': tour.kolonne_type,
-            'firmenname': tour.client.firmenname if tour.client else None
+            'firmenname': tour.client.firmenname if tour.client else None,
+            'strasse': tour.address.strasse if tour.address else None,
+            'hausnr': tour.address.hausnr if tour.address else None,
+            'plz': tour.address.plz if tour.address else None,
+            'ort': tour.address.ort if tour.address else None
         }
         for tour in tours
     ]
@@ -171,6 +178,48 @@ def update_date(eventID):
             return jsonify({'error': 'Tour nicht gefunden'}), 404
 
     except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+@app.route('/change_address/<int:tour_id>', methods=['PUT'])
+def change_address(tour_id):
+    try:
+        data = request.json
+        new_address = data.get('newAddress')
+
+        strasse = new_address.get('strasse')
+        hausnr = new_address.get('hausnr')
+        plz = new_address.get('plz')
+        ort = new_address.get('ort')
+
+        # Sitzung für Datenbankoperationen erhalten
+        db_session, connection_status = db_connection.get_session()
+
+        # Tour anhand der ID abrufen
+        tour = db_session.query(Tour).filter_by(tour_id=tour_id).first()
+
+        if tour:
+            # Adresse der Tour aktualisieren
+            address = db_session.query(Address).filter_by(address_id=tour.address_id).first()
+            if address:
+                address.strasse = new_address['strasse']
+                address.hausnr = new_address['hausnr']
+                address.plz = new_address['plz']
+                address.ort = new_address['ort']
+                db_session.commit()
+                db_session.close()
+                
+                print(f"Adresse geändert für Tour ID {tour_id}: {strasse}, {hausnr}, {plz}, {ort}")  # Füge diese Zeile hinzu, um in der Konsole zu überprüfen
+
+                return jsonify({'message': 'Adresse erfolgreich geändert'})
+            else:
+                db_session.close()
+                return jsonify({'error': 'Adresse nicht gefunden'}), 404
+        else:
+            db_session.close()
+            return jsonify({'error': 'Tour nicht gefunden'}), 404
+
+    except Exception as e:
+        print(f"Fehler beim Ändern der Adresse für Tour ID {tour_id}: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':

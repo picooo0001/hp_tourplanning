@@ -1,13 +1,16 @@
 # To do's:
-    - modify_tours fertig machen
-    - startzeit bei drap/drop korrigieren
-    - further info bei 1/4 events anpassen / streichen?
+    - [ ] Login Page
+    - [ ] Kalender bearbeiten (vierteltagsevents und zusätzliche Info)
+    - [ ] Hosting / Server
+    - [ ] Beschreibungen im Code
+    - [ ] Beschreibungs file, das Vorgehen Herausforderungen etc erklärt
+
+
+    - [ ] Maps Unterseite auf der man Touren tracken kann
+    - [ ] Input Validation 
+    
     - css stylen und anpassen -> einheitliches Design
 
     
 # User operations:
 -He should be able to change the date
--He should be able to change the address and the additional information
-
--He should be able to delete a created Tour
--He should be able to change the Kolonne

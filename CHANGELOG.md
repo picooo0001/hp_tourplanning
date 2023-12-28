@@ -71,4 +71,10 @@
 - created modify_tours (site where the user can modify the tours)
 - created a tour list inside the modify_tours file
 - created delete and change kolonne button for the list
-- implemented drag n drop function in the calendar so user can change the date by dragging and dropping 
+- implemented drag n drop function in the calendar so user can change the date by dragging and dropping
+
+## 28.12.2023
+- impelemted a function to change the date (inclusive flask route etc.)
+- adapted the database model for adress (now the adress shows up as well in modify_tours list)
+- prettied up the code of modify_tours with bootstrap
+- linked up the different html sites amongst each other

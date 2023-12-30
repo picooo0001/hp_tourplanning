@@ -119,7 +119,7 @@ def create_tour():
             zeitbedarf = request.form['zeitbedarf']
 
             db_writer = DataWriter(date, kolonne, strasse, hausnr, plz, ort, firmenname, info, private, zeitbedarf, start_time="08:00:00")
-            db_connector = DatabaseConnector('postgresql://hp_admin:Nudelholz03#@localhost/hp_postgres')
+            db_connector = DatabaseConnector('postgres://hjosbvtqcidmbk:14c260d367e129e5d94221b2ba7ac414c72a969a561707ff8d680ce67264c65f@ec2-3-217-146-37.compute-1.amazonaws.com:5432/d317upfk639k0r')
             db_connector.get_session()
             db_writer.write_tour_data_to_db()
             db_connector.close_connection()

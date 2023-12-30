@@ -1,4 +1,4 @@
-from sqlalchemy import String, ForeignKey ,Column, VARCHAR, Date, SmallInteger,Integer, Numeric, TIMESTAMP
+from sqlalchemy import Time, String, ForeignKey ,Column, VARCHAR, Date, SmallInteger,Integer, Numeric, TIMESTAMP
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
@@ -18,6 +18,7 @@ class Tour(Base):
     private = Column(VARCHAR(225))
     further_info = Column(VARCHAR(255))
     zeitbedarf = Column(Numeric(3,2))
+    start_time = Column(Time)
 
     client = relationship("Client", back_populates="tours")
     address = relationship("Address")

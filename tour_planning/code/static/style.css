@@ -83,3 +83,13 @@ body {
   margin-bottom: 20px;
   font-weight: bold;
 }
+
+#notification-container {
+  position: absolute;
+  bottom: 125px; /* Passe den Abstand nach Bedarf an */
+  left: 50%; /* Horizontale Ausrichtung in der Mitte */
+  transform: translateX(-50%);
+  z-index: 1000; /* Stelle sicher, dass das Popup über anderen Inhalten liegt */
+  width: 100%; /* Breite des Containers */
+  max-width: 500px; /* Maximal erlaubte Breite */
+}

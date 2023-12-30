@@ -1,17 +1,15 @@
-# To do's:
-    - [ ] Popup bei falschen Login Daten
-    - [ ] Kalender bearbeiten (vierteltagsevents und zusätzliche Info)
-    
+# To do's:    
     - [ ] Hosting / Server
     - [ ] Beschreibungen im Code
     - [ ] Beschreibungs file, das Vorgehen Herausforderungen etc erklärt
 
-
+    - [ ] Landing page
     - [ ] Maps Unterseite auf der man Touren tracken kann
-    - [ ] Input Validation 
-    
-    - css stylen und anpassen -> einheitliches Design
+    - [ ] Input Validation
+    - [ ] Error Handling
+    - [ ] Farbe beim Anlegen eines besonden Events auswählen
+    - [ ] Evtl. Tour Kalender redesign
 
     
-# User operations:
--He should be able to change the date
+
+

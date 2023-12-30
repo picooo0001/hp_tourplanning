@@ -27,12 +27,10 @@
               <li class="nav-item">
                 <a class="nav-link" href="/modify_tours.html">Toureinträge ändern</a>
               </li>
-            </ul>
-            <ul class="navbar-nav">
               <li class="nav-item">
                 <a class="nav-link" href="/logout">Logout</a>
               </li>
-          </ul>
+            </ul>
           </div>
         </div>
       </nav>
@@ -52,26 +50,29 @@
             right: 'timeGridWeek, timeGridDay'
           },
           locale: 'de',
+          timeZone: 'Europe/Berlin',
           themeSystem: 'bootstrap5',
           windowResize: true,
           hiddenDays: [0],
           expandRows: true,
           slotMinTime: '07:00:00',
           slotMaxTime: '19:00:00',
-          slotDuration: '01:00:00', 
+          slotDuration: '01:00:00',
           slotLabelInterval: { hours: 1 },
           editable: true,
           eventDrop: function(info) {
             var eventID = info.event.id;
             console.log('Tour ID:', eventID);
-            var newDate = info.event.start;
+            // var newDate = info.event.start;
+            var newStart = info.event.start.toISOString();
+            console.log(newStart)
 
-            fetch(`/update_date/`+ eventID, {
+            fetch(`/update_event/`+ eventID, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify({ newDate: newDate })
+              body: JSON.stringify({ newStart: newStart })
             })
             .then(response => response.json())
             .then(data => {
@@ -93,9 +94,34 @@
               }
             }
           ],
-          eventContent: function(arg) {
-            return {
-              html: '<b>' + arg.event.title + '</b>' + '<br>' + arg.event.extendedProps.description
+          eventResize: function(info) {
+            var eventID = info.event.id;
+            var start = info.event.start;
+            var end = info.event.end;
+
+            var millisecondsDiff = end - start; // Differenz in Millisekunden
+            var hoursDiff = millisecondsDiff / (1000 * 60 * 60); // Differenz in Stunden
+
+            var newDuration = hoursDiff / 8;
+
+            fetch(`/update_duration/${eventID}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ newDuration: newDuration })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Event-Dauer wurde aktualisiert:", data.message);
+            })
+            .catch(error => {
+                console.error("Fehler beim Aktualisieren der Dauer:", error);
+            });
+        },
+        eventContent: function(arg) {
+          return {
+            html: '<b>' + arg.event.title + '</b>' + '<br>' + arg.event.extendedProps.description
             };
           },
           eventDisplay: 'block',

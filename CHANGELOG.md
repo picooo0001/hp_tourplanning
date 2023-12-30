@@ -82,3 +82,9 @@
 - added logout function - in navbar of each site
 - added protection to the sites meaning that you cant see content / send content without signing in
 - added new table for user auth in db (adaptedt database model as well)
+
+## 30.12.2023
+- added new Column to database (start_time) / adapted the database model
+- added a popup to the login page (if your credentials are wrong)
+- added functionality to change the start- and endtime of events
+- added functionality to change the event duration

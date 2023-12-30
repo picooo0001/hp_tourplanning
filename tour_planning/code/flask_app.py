@@ -2,7 +2,7 @@ from flask import Flask, session, redirect, url_for, request, render_template, j
 from input_to_database import DataWriter
 from orm import Tour, Address, Client, User
 from db_connect_disconnect import DatabaseConnector
-from datetime import datetime, timedelta, time
+from datetime import datetime, timedelta, time 
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import class_mapper, joinedload
 from functools import wraps
@@ -50,9 +50,6 @@ def login():
         print(session)
         return jsonify({'message': 'Anmeldung erfolgreich'}),200
     else:
-        #password = 'password'
-        #hashed_password = generate_password_hash(password)
-        #print(hashed_password)
         return jsonify({'message': 'Ungültige Anmeldeinformationen'}), 401
 
 @app.route('/logout')
@@ -120,8 +117,9 @@ def get_tours():
             kolonne = tour.kolonne_type  # Annahme: Die Eigenschaft, die die Kolonne angibt
             event_color = kolonne_color_map.get(kolonne, 'blue')
 
+            start_time = tour.start_time
             event_date = tour.date
-            event_start = datetime.combine(event_date, time(7,0,0))
+            event_start = datetime.combine(event_date, start_time)
             event_duration = float(tour.zeitbedarf) if tour.zeitbedarf is not None else 1.0
             event_end = event_start + timedelta(hours=event_duration * 8)
             
@@ -145,6 +143,26 @@ def get_tours():
     
     except Exception as e:
         print("Fehler:", str(e))  # Hier kannst du den Fehler in der Konsole anzeigen
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/update_duration/<int:eventID>', methods=['POST'])
+@login_required
+def update_duration(eventID):
+    try:
+        data = request.json
+        new_duration = float(data.get('newDuration'))
+
+        db_session, connection_status = db_connection.get_session()
+
+        tour = db_session.query(Tour).filter_by(tour_id=eventID).first()
+        if tour:
+            tour.zeitbedarf = new_duration
+            db_session.commit()
+            return jsonify({'message': 'Event-Dauer erfolgreich aktualisiert'})
+        else:
+            return jsonify({'error': 'Tour nicht gefunden'}), 404
+
+    except Exception as e:
         return jsonify({'error': str(e)}), 500
     
 @app.route('/show_tours', methods=['GET'])
@@ -205,18 +223,21 @@ def change_kolonne(tour_id, new_kolonne):
         print("Fehler:", str(e))
         return jsonify({'error': str(e)}), 500
     
-@app.route('/update_date/<int:eventID>', methods=['POST'])
+@app.route('/update_event/<int:eventID>', methods=['POST'])
 @login_required
-def update_date(eventID):
+def update_event(eventID):
     try: 
         data = request.json
-        new_date = data.get('newDate')
+        new_start = data.get('newStart')
+
+        new_start_datetime = datetime.fromisoformat(new_start)
 
         db_session, connection_status = db_connection.get_session()
 
         tour = db_session.query(Tour).filter_by(tour_id=eventID).first()
         if tour:
-            tour.date = new_date
+            tour.date = new_start_datetime.date()  # Datum aktualisieren
+            tour.start_time = new_start_datetime.time()
             db_session.commit()
             return jsonify({'message': 'Tourdatum erfolgreich aktualisiert'})
         else:
@@ -224,6 +245,7 @@ def update_date(eventID):
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
     
 @app.route('/change_address/<int:tour_id>', methods=['PUT'])
 @login_required

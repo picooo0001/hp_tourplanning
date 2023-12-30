@@ -1,188 +1,187 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Toureinträge bearbeiten</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <a class="navbar-brand" href="https://www.hp-geruestbau.de/">HP Gerüstbau</a>
-          <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Toureinträge bearbeiten</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/tours.html">Tour Kalender</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/tourcreation.html">Tour erstellen</a>
-              </li>
+    <head>
+        <!--Standardprodezur-->
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Toureinträge bearbeiten</title>
+        <!--Einbindung von Bootstrap CSS-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+    <body>
+        <!--Einbindung der NavBar-->
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="https://www.hp-geruestbau.de/">HP Gerüstbau</a>
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                  <a class="nav-link" href="/logout">Logout</a>
+                    <a class="nav-link active" aria-current="page" href="#">Toureinträge bearbeiten</a>
                 </li>
-            </ul>
-          </div>
-        </div>
-    </nav>
-    <div class="container-fluid mt-3 mb-3">
-        <div class="row">
-            <div class="col">
-                <h1 class="text-center">Toureinträge bearbeiten</h1>
+                <li class="nav-item">
+                    <a class="nav-link" href="/tours.html">Tour Kalender</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/tourcreation.html">Tour erstellen</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">Logout</a>
+                </li>
+                </ul>
+            </div>
+            </div>
+        </nav>
+        <!--Überschrift-->
+        <div class="container-fluid mt-3 mb-3">
+            <div class="row">
+                <div class="col">
+                    <h1 class="text-center">Toureinträge bearbeiten</h1>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-sm-12 col-md-10 col-lg-8">
-                <div class="card">
-                    <div clas="card-body">
-                        <ul class="list-group" id="tour-list">
-                        <!-- Hier werden die Touren eingefügt -->
-                        </ul>
+        <!--Listenkonfiguration der Touren-->
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-sm-12 col-md-10 col-lg-8">
+                    <div class="card">
+                        <div clas="card-body">
+                            <ul class="list-group" id="tour-list">
+                            <!-- Hier kommen die Touren rein-->
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>   
-    <!-- Bootstrap JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- JavaScript zum Anzeigen der Touren -->
-    <script>
-        // JavaScript, um die Touren anzuzeigen
-        fetch('/show_tours') // Routenaufruf
-            .then(response => response.json()) // Konvertiere die Antwort in JSON
-            .then(data => {
-                const tourList = document.getElementById('tour-list'); // UL-Element
-                data.forEach(tour => {
-                    const listItem = document.createElement('li'); // Erstelle LI-Element
-                    listItem.classList.add('list-group-item'); // Füge Bootstrap-Klasse hinzu
-                    
-                    const addressForm = `
-                        <form id="addressForm-${tour.tour_id}" class="mb-3" style="display: none;">
-                            <div class="mb-3">
-                                <input type="text" class="form-control" id="strasse-${tour.tour_id}" name="strasse" placeholder="Straße">
-                                <input type="text" class="form-control" id="hausnr-${tour.tour_id}" name="hausnr" placeholder="Hausnummer">
-                                <input type="text" class="form-control" id="plz-${tour.tour_id}" name="plz" placeholder="PLZ">
-                                <input type="text" class="form-control" id="ort-${tour.tour_id}" name="ort" placeholder="Ort">
+        <!--Bootstrap JS (muss hier oben eingefügt werden, sonst funktioniert das Dropdown nicht)-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            // Touren die in der DB existieren fetchen
+            fetch('/show_tours')
+                .then(response => response.json()) // Wandelt Serverantwort in JSON um
+                .then(data => {
+                    const tourList = document.getElementById('tour-list'); // UL-Element
+                    data.forEach(tour => {
+                        const listItem = document.createElement('li'); // erstellt ein LI-Element
+                        listItem.classList.add('list-group-item'); 
+                        
+                        // HTML Code für den Address Input und Bestätigungsbutton der Änderung
+                        const addressForm = `
+                            <form id="addressForm-${tour.tour_id}" class="mb-3" style="display: none;">
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" id="strasse-${tour.tour_id}" name="strasse" placeholder="Straße">
+                                    <input type="text" class="form-control" id="hausnr-${tour.tour_id}" name="hausnr" placeholder="Hausnummer">
+                                    <input type="text" class="form-control" id="plz-${tour.tour_id}" name="plz" placeholder="PLZ">
+                                    <input type="text" class="form-control" id="ort-${tour.tour_id}" name="ort" placeholder="Ort">
+                                </div>
+                                <button type="button" class="btn btn-success text-white me-3" onclick="submitAddressChange(${tour.tour_id})">Aktualisieren</button>
+                                <button type="button" class="btn btn-danger text-white me-3" onclick="cancelAddressChange(${tour.tour_id})" style="display: none;">Abbrechen</button>
+                            </form>
+                        `;
+                        
+                        // HTML für das Kolonnen Dropdown Menü
+                        const kolonneDropdown = `
+                                <div class="dropdown">
+                                <button class="btn btn-warning text-white me-3 dropdown-toggle" type="button" id="kolonneDropdown-${tour.tour_id}" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Kolonne auswählen
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="kolonneDropdown-${tour.tour_id}">
+                                    <li><a class="dropdown-item" href="#" data-value="Kolonne A" onclick="changeKolonne(${tour.tour_id}, 'Kolonne A')">Kolonne A</a></li>
+                                    <li><a class="dropdown-item" href="#" data-value="Kolonne B" onclick="changeKolonne(${tour.tour_id}, 'Kolonne B')">Kolonne B</a></li>
+                                    <li><a class="dropdown-item" href="#" data-value="Kolonne C" onclick="changeKolonne(${tour.tour_id}, 'Kolonne C')">Kolonne C</a></li>
+                                </ul>
                             </div>
-                            <button type="button" class="btn btn-success text-white me-3" onclick="submitAddressChange(${tour.tour_id})">Aktualisieren</button>
-                            <button type="button" class="btn btn-danger text-white me-3" onclick="cancelAddressChange(${tour.tour_id})" style="display: none;">Abbrechen</button>
-                        </form>
-                    `;
+                        `;
+                        
+                        // Hier werden die Daten dynamisch ausgegeben und pro Kästchen "gelistet"
+                        listItem.innerHTML = `
+                            <div class="text-center mb-3">
+                                Datum: ${tour.date} <br>
+                                Firmenname: ${tour.firmenname} | Kolonne: ${tour.kolonne_type} <br>
+                                Adresse: ${tour.strasse} ${tour.hausnr}, ${tour.plz}, ${tour.ort}
+                            </div>
+                            <div class="d-flex justify-content-center mt-3 mb-2">
+                                ${kolonneDropdown}
+                                <button type="button" class="btn btn-warning text-white me-3" onclick="toggleAddressForm(${tour.tour_id})">Adresse ändern</button>
+                                <button type="button" class="btn btn-success text-white me-3" onclick="changeKolonne(${tour.tour_id})" style="display: none;">Ändern</button>
+                                <button type="button" class="btn btn-danger text-white me-3" onclick="deleteTour(${tour.tour_id})">Tour löschen</button> 
+                            </div>
+                        `;
+                        
+                        tourList.appendChild(listItem); // Hier wird ein Kästchen in die Liste "geaddet"
+                        tourList.innerHTML += addressForm;
 
-                    const kolonneDropdown = `
-                            <div class="dropdown">
-                            <button class="btn btn-warning text-white me-3 dropdown-toggle" type="button" id="kolonneDropdown-${tour.tour_id}" data-bs-toggle="dropdown" aria-expanded="false">
-                                Kolonne auswählen
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="kolonneDropdown-${tour.tour_id}">
-                                <li><a class="dropdown-item" href="#" data-value="Kolonne A" onclick="changeKolonne(${tour.tour_id}, 'Kolonne A')">Kolonne A</a></li>
-                                <li><a class="dropdown-item" href="#" data-value="Kolonne B" onclick="changeKolonne(${tour.tour_id}, 'Kolonne B')">Kolonne B</a></li>
-                                <li><a class="dropdown-item" href="#" data-value="Kolonne C" onclick="changeKolonne(${tour.tour_id}, 'Kolonne C')">Kolonne C</a></li>
-                            </ul>
-                        </div>
-                    `;
+                        const dropdownButton = document.getElementById(`kolonneDropdown-${tour.tour_id}`);
+                        dropdownButton.classList.add('btn-warning'); // Farbe für das Kolonnen Dropdown
+                    });
+                })
+                .catch(error => console.error('Error:', error)); // Error Handling
+            
+            // Funktion um eine Tour anhand der tourID zu löschen
+            function deleteTour(tourId) {
+                fetch(`/delete_tour/${tourId}`, {
+                    method: 'DELETE'
+                })
+                .then(response => response.json()) // wird in JSON umgewandelt (wird in der Flask Route wieder entschlüsselt)
+                .then(data => {
+                    console.log(data);
+                })
+                .catch(error => console.error('Error:', error));
+            }
 
-                    listItem.innerHTML = `
-                        <div class="text-center mb-3">
-                            Datum: ${tour.date} <br>
-                            Firmenname: ${tour.firmenname} | Kolonne: ${tour.kolonne_type} <br>
-                            Adresse: ${tour.strasse} ${tour.hausnr}, ${tour.plz}, ${tour.ort}
-                        </div>
-                        <div class="d-flex justify-content-center mt-3 mb-2">
-                            ${kolonneDropdown}
-                            <button type="button" class="btn btn-warning text-white me-3" onclick="toggleAddressForm(${tour.tour_id})">Adresse ändern</button>
-                            <button type="button" class="btn btn-success text-white me-3" onclick="changeKolonne(${tour.tour_id})" style="display: none;">Ändern</button>
-                            <button type="button" class="btn btn-danger text-white me-3" onclick="deleteTour(${tour.tour_id})">Tour löschen</button> 
-                        </div>
-                    `;
-                    
-                    tourList.appendChild(listItem); // Füge das LI-Element der UL-Liste hinzu
-                    tourList.innerHTML += addressForm;
-
-                    const dropdownButton = document.getElementById(`kolonneDropdown-${tour.tour_id}`);
-                    dropdownButton.classList.add('btn-warning');
-                });
-            })
-            .catch(error => console.error('Error:', error)); // Fehlerbehandlung
-    </script>
-    <script>
-        function deleteTour(tourId) {
-        fetch(`/delete_tour/${tourId}`, {
-            method: 'DELETE'
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data); // Hier könntest du Feedback an den Benutzer geben
-            // Möglicherweise die Tour aus der Liste entfernen und die Ansicht aktualisieren
-        })
-        .catch(error => console.error('Error:', error));
-    }
-    </script>
-    <script>
-        function changeKolonne(tourId, selectedKolonne) {
-            fetch(`/change_kolonne/${tourId}/${selectedKolonne}`, { method: 'PUT' })
+            // Funkrion um die Kolonne per Dropdown zu ändern
+            function changeKolonne(tourId, selectedKolonne) {
+                fetch(`/change_kolonne/${tourId}/${selectedKolonne}`, { 
+                    method: 'PUT' 
+                })
                 .then(response => response.json())
                 .then(data => {
                     console.log(data);
+                    // hier wird die Farbe von gelb auf grün geändert, sobald die Kolonne gewechselt wurde
                     const dropdownButton = document.getElementById(`kolonneDropdown-${tourId}`);
                     dropdownButton.classList.remove('btn-warning');
                     dropdownButton.classList.add('btn-success');
                     dropdownButton.innerHTML = selectedKolonne;
-                    // Hier könntest du eine Rückmeldung anzeigen oder die Liste neu laden
                 })
                 .catch(error => console.error('Error:', error));
-        }
-    </script>
-    <script>
-        function toggleAddressForm(tourId) {
-            const addressForm = document.getElementById(`addressForm-${tourId}`);
-            addressForm.style.display = addressForm.style.display === 'none' ? 'block' : 'none';
-        }
+            }
+            // Funktion, die den Adress Input triggert, wenn der "Adresse ändern" Button gedrückt wird
+            function toggleAddressForm(tourId) {
+                const addressForm = document.getElementById(`addressForm-${tourId}`);
+                addressForm.style.display = addressForm.style.display === 'none' ? 'block' : 'none';
+            }
 
-        function cancelAddressChange(tourId) {
-            const addressForm = document.getElementById(`addressForm-${tourId}`);
-            const changeButton = document.querySelector(`button[onclick="toggleAddressForm(${tourId})"]`);
-            const cancelButton = document.querySelector(`button[onclick="cancelAddressChange(${tourId})"]`);
+            // Logik hinter dem Aktualisieren Button in der Form
+            function submitAddressChange(tourId) {
+                // Die Variablen "werden extrahiert" und zu einer (newAdressData) zusammengefasst
+                const strasse = document.getElementById(`strasse-${tourId}`).value;
+                const hausnr = document.getElementById(`hausnr-${tourId}`).value;
+                const plz = document.getElementById(`plz-${tourId}`).value;
+                const ort = document.getElementById(`ort-${tourId}`).value;
+                
+                const newAddressData = {
+                    strasse: strasse,
+                    hausnr: hausnr,
+                    plz: plz,
+                    ort: ort
+                };
 
-            addressForm.style.display = 'none';
-            changeButton.style.display = 'block';
-            cancelButton.style.display = 'none';
-        }
-
-        function submitAddressChange(tourId) {
-            const strasse = document.getElementById(`strasse-${tourId}`).value;
-            const hausnr = document.getElementById(`hausnr-${tourId}`).value;
-            const plz = document.getElementById(`plz-${tourId}`).value;
-            const ort = document.getElementById(`ort-${tourId}`).value;
-            
-            const newAddressData = {
-                strasse: strasse,
-                hausnr: hausnr,
-                plz: plz,
-                ort: ort
-            };
-
-            fetch(`/change_address/${tourId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({newAddress: newAddressData}),
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data); // Feedback anzeigen oder weitere Aktionen durchführen
-            })
-            .catch(error => console.error('Error:', error));
-        }
-    </script>
-</body>
+                fetch(`/change_address/${tourId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({newAddress: newAddressData}), // hier wird die neue Adresse an die Flask Route gesendet
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data); 
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        </script>
+    </body>
 </html>

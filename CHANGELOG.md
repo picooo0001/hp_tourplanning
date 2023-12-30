@@ -88,3 +88,7 @@
 - added a popup to the login page (if your credentials are wrong)
 - added functionality to change the start- and endtime of events
 - added functionality to change the event duration
+- reviewd all py code and removed not needed code / added needed code
+- added docstrings for the methods inside the different flask routes 
+- added logging to the flask app for an better overview
+- added commentary to all html files / removes not needed code

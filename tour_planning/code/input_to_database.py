@@ -1,8 +1,8 @@
+from sqlalchemy import and_
 from db_connect_disconnect import DatabaseConnector
 from orm import Tour, Address, Client
 from background_checks import BackgroundChecks
 from log_config import LogConfig
-from sqlalchemy import and_
 
 class DataWriter:
     """Klasse zum Schreiben von Daten in die Datenbank.
@@ -16,7 +16,7 @@ class DataWriter:
         logger: Der Logger für das Schreiben von Logmeldungen.
     """
 
-    def __init__(self, date, kolonne, strasse, hausnr, plz, ort, firmenname, info, private, zeitbedarf):
+    def __init__(self, date, kolonne, strasse, hausnr, plz, ort, firmenname, info, private, zeitbedarf, start_time):
         """Initialisiert die DataWriter-Klasse."""
         self.db_connector = DatabaseConnector('postgresql://hp_admin:Nudelholz03#@localhost/hp_postgres')
         self.session, _ = self.db_connector.get_session()
@@ -33,6 +33,7 @@ class DataWriter:
         self.info = info
         self.private = private
         self.zeitbedarf = zeitbedarf
+        self.start_time = start_time
 
 
     def create_db_entry(self):
@@ -41,7 +42,9 @@ class DataWriter:
                         kolonne_type=self.kolonne,
                         private=self.private,
                         further_info=self.info,
-                        zeitbedarf = self.zeitbedarf)
+                        zeitbedarf = self.zeitbedarf,
+                        start_time = self.start_time
+                        )
         
         self.new_address = Address(strasse=self.strasse,
                               hausnr=self.hausnr,
@@ -116,9 +119,3 @@ class DataWriter:
                 self.db_connector.close_connection()
                 self.logger.info("Datenbankverbindung geschlossen.")
  
-if __name__ == "__main__":
-    db_connector = DatabaseConnector('postgresql://hp_admin:Nudelholz03#@localhost/hp_postgres')
-    establish_connection = db_connector.get_session()
-
-    db_writer = DataWriter()
-    db_writer.write_tour_data_to_db()

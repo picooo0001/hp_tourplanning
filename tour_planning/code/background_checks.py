@@ -1,5 +1,4 @@
 import requests
-from datetime import *
 from log_config import LogConfig
 
 class BackgroundChecks:
@@ -17,7 +16,6 @@ class BackgroundChecks:
         self.hausnr = hausnr
         self.plz = plz
         self.ort = ort
-
         log_config = LogConfig()
         self.logger = log_config.setup_logger('background_check_logger', 'address_check.log')
 
@@ -29,17 +27,14 @@ class BackgroundChecks:
             bool: True, wenn die Adresse existiert; False, wenn die Adresse nicht existiert.
         """
         address = f"{self.strasse} {self.hausnr} {self.plz} {self.ort}"
-
         url = "https://nominatim.openstreetmap.org/search"
-
+        
         params = {
             'format': 'json',
             'q': address
         }
 
         response = requests.get(url, params=params)
-
-        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         log_message = f"Adresse: {address}, API-Antwort: {response.json()}, API-Statuscode: {response.status_code}"
         self.logger.info(log_message)
 

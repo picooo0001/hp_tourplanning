@@ -1,247 +1,253 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Tour</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-
-    <!-- Bootstrap Datepicker CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
-
-    <!-- Bootstrap JavaScript -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-    <!-- Bootstrap Datepicker JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <a class="navbar-brand" href="https://www.hp-geruestbau.de/">HP Gerüstbau</a>
-          <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Tour erstellen</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/tours.html">Tour Kalender</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/modify_tours.html">Toureinträge bearbeiten</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/logout">Logout</a>
-              </li>
-            </ul>
-          </div>
+    <head>
+        <!--Standardprozedur-->
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Create Tour</title>
+        <!--Einbindung CSS Stylesheet-->
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+        <!--Einbundung Bootstrap CSS-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+        <!-- Bootstrap Datepicker CSS -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
+        <!-- Bootstrap JavaScript -->
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <!-- Bootstrap Datepicker JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    </head>
+    <body>
+        <!--Navaar-->
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="https://www.hp-geruestbau.de/">HP Gerüstbau</a>
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Tour erstellen</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/tours.html">Tour Kalender</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/modify_tours.html">Toureinträge bearbeiten</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">Logout</a>
+                </li>
+                </ul>
+            </div>
+            </div>
+        </nav>
+        <!--Überschrift-->
+        <div class="container-fluid mt-3 mb-3">
+            <div class="d-flex justify-content-center align-items-center">
+                <h1>Tour anlegen</h1>
+            </div>
         </div>
-    </nav>
-    <div class="container-fluid mt-3 mb-3">
-        <div class="d-flex justify-content-center align-items-center">
-            <h1>Tour anlegen</h1>
+        <!--Input Form-->
+        <div class="container">
+            <form action="/create_tour" method="post" id="tourForm">
+                <div class="row g-3 align-items-start">
+                    <div class="col-sm-4 col-md-4">
+                        <div class="form-floating mb-3 mt-3">
+                            <input type="text" class="form-control" id="firmenname" name="firmenname" placeholder=" " required>
+                            <label for="firmenname">Firmenname</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 col-md-4">
+                        <div class="form-floating mb-3 mt-3">
+                            <input type="date" class="form-control" id="date" name="date" placeholder=" " required>
+                            <label for="date">Datum</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 col-md-2">
+                        <div class="dropdown mb-3 mt-3">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="kolonneDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                Kolonne
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="kolonneDropdown">
+                                <li><a class="dropdown-item" href="#" data-value="Kolonne A" onclick="setSelectedValue('Kolonne A')">Kolonne A</a></li>
+                                <li><a class="dropdown-item" href="#" data-value="Kolonne B" onclick="setSelectedValue('Kolonne B')">Kolonne B</a></li>
+                                <li><a class="dropdown-item" href="#" data-value="Kolonne C" onclick="setSelectedValue('Kolonne C')">Kolonne C</a></li>
+                            </ul>
+                            <!--Verstecktes Input Feld um Weert zwischen zuspeichern-->
+                            <input type="hidden" id="kolonne" name="kolonne">
+                        </div>
+                    </div>
+                    <div class="col-sm-4 col-md-2">
+                        <div class="dropdown mb-3 mt-3">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="durationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                Zeitbedarf
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="durationDropdown">
+                                <li><a class="dropdown-item" href="#" data-value="1" onclick="setSelectedDuration('1.0')">Ganzer Tag</a></li>
+                                <li><a class="dropdown-item" href="#" data-value="0.75" onclick="setSelectedDuration('0.75')">Dreiviertel Tag</a></li> 
+                                <li><a class="dropdown-item" href="#" data-value="0.5" onclick="setSelectedDuration('0.5')">Halber Tag</a></li> 
+                                <li><a class="dropdown-item" href="#" data-value="0.25" onclick="setSelectedDuration('0.25')">Viertel Tag</a></li>  
+                            </ul>
+                            <input type="hidden" id="zeitbedarf" name="zeitbedarf">
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-3 align-items-start">
+                    <div class="col-sm-8 col-md-8">
+                        <div class="form-floating mb-3 mt-3">
+                            <input type="text" class="form-control" id="strasse" name="strasse" placeholder=" " required>
+                            <label for="strasse">Straße</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-floating mb-3 mt-3">
+                            <input type="number" class="form-control" id="hausnr" name="hausnr" placeholder=" " required>
+                            <label for="hausnr">Hausnummer</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-3 align-items-start">
+                    <div class="col-sm-8 col-md-8">
+                        <div class="form-floating mb-3 mt-3">
+                            <input type="text" class="form-control" id="ort" name="ort" placeholder=" " required>
+                            <label for="ort">Ort</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-floating mb-3 mt-3">
+                            <input type="text" class="form-control" id="plz" name="plz" placeholder=" " required>
+                            <label for="plz">Postleihzahl</label>
+                        </div>
+                    </div>        
+                </div>
+                <div class="row g-3 align-items-start">
+                    <div class="col-sm-8 col-md-8 mb-3 mt-3">
+                        <div class="form-floating">
+                            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea" name="info"></textarea>
+                            <label for="floatingTextarea">Comments</label>
+                        </div>
+                    </div>
+                    <div class="col-sm col-md">
+                        <div class="form-check form-switch mt-3 mb-3">
+                            <input class="form-check-input" type="checkbox" role="switch" id="private_switch" name="private_switch">
+                            <label class="form-check-label" for="private">Privater Auftraggeber?</label>
+                        </div>
+                        <input type="hidden" id="private" name="private" value="False">
+                    </div>
+                </div>
+                <div class="row g-3 mt-3 align-items-start">
+                    <div class="col-12 text-center">
+                        <button type="button" class="btn btn-success btn-lg me-3" onclick="createTour()">Tour erstellen</button>
+                        <button type="button" class="btn btn-danger btn-lg" onclick="deleteEntry()">Abbrechen</button>
+                    </div>
+                </div>
+            </div>
+            </form>
+            <!--Div für das Popup-->
+            <div class="row g-3 mt-3 mb-3" id="notification"></div>
         </div>
-    </div>
-    <div class="container">
-        <form action="/create_tour" method="post" id="tourForm">
-            <div class="row g-3 align-items-start">
-                <div class="col-sm-4 col-md-4">
-                    <div class="form-floating mb-3 mt-3">
-                        <input type="text" class="form-control" id="firmenname" name="firmenname" placeholder=" " required>
-                        <label for="firmenname">Firmenname</label>
-                    </div>
-                </div>
-                <div class="col-sm-4 col-md-4">
-                    <div class="form-floating mb-3 mt-3">
-                        <input type="date" class="form-control" id="date" name="date" placeholder=" " required>
-                        <label for="date">Datum</label>
-                    </div>
-                </div>
-                <div class="col-sm-4 col-md-2">
-                    <div class="dropdown mb-3 mt-3">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="kolonneDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            Kolonne
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="kolonneDropdown">
-                            <li><a class="dropdown-item" href="#" data-value="Kolonne A" onclick="setSelectedValue('Kolonne A')">Kolonne A</a></li>
-                            <li><a class="dropdown-item" href="#" data-value="Kolonne B" onclick="setSelectedValue('Kolonne B')">Kolonne B</a></li>
-                            <li><a class="dropdown-item" href="#" data-value="Kolonne C" onclick="setSelectedValue('Kolonne C')">Kolonne C</a></li>
-                        </ul>
-                        <input type="hidden" id="kolonne" name="kolonne">
-                    </div>
-                </div>
-                <div class="col-sm-4 col-md-2">
-                    <div class="dropdown mb-3 mt-3">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="durationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            Zeitbedarf
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="durationDropdown">
-                            <li><a class="dropdown-item" href="#" data-value="1" onclick="setSelectedDuration('1.0')">Ganzer Tag</a></li>
-                            <li><a class="dropdown-item" href="#" data-value="0.75" onclick="setSelectedDuration('0.75')">Dreiviertel Tag</a></li> 
-                            <li><a class="dropdown-item" href="#" data-value="0.5" onclick="setSelectedDuration('0.5')">Halber Tag</a></li> 
-                            <li><a class="dropdown-item" href="#" data-value="0.25" onclick="setSelectedDuration('0.25')">Viertel Tag</a></li>  
-                        </ul>
-                        <input type="hidden" id="zeitbedarf" name="zeitbedarf">
-                    </div>
-                </div>
-            </div>
-            <div class="row g-3 align-items-start">
-                <div class="col-sm-8 col-md-8">
-                    <div class="form-floating mb-3 mt-3">
-                        <input type="text" class="form-control" id="strasse" name="strasse" placeholder=" " required>
-                        <label for="strasse">Straße</label>
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="form-floating mb-3 mt-3">
-                        <input type="number" class="form-control" id="hausnr" name="hausnr" placeholder=" " required>
-                        <label for="hausnr">Hausnummer</label>
-                    </div>
-                </div>
-            </div>
-            <div class="row g-3 align-items-start">
-                <div class="col-sm-8 col-md-8">
-                    <div class="form-floating mb-3 mt-3">
-                        <input type="text" class="form-control" id="ort" name="ort" placeholder=" " required>
-                        <label for="ort">Ort</label>
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="form-floating mb-3 mt-3">
-                        <input type="text" class="form-control" id="plz" name="plz" placeholder=" " required>
-                        <label for="plz">Postleihzahl</label>
-                    </div>
-                </div>        
-            </div>
-            <div class="row g-3 align-items-start">
-                <div class="col-sm-8 col-md-8 mb-3 mt-3"> <!-- Zusätzliche Margin-Klasse hinzugefügt -->
-                    <div class="form-floating">
-                        <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea" name="info"></textarea>
-                        <label for="floatingTextarea">Comments</label>
-                    </div>
-                </div>
-                <div class="col-sm col-md">
-                    <div class="form-check form-switch mt-3 mb-3">
-                        <input class="form-check-input" type="checkbox" role="switch" id="private_switch" name="private_switch">
-                        <label class="form-check-label" for="private">Privater Auftraggeber?</label>
-                    </div>
-                    <!-- Ein verstecktes Input-Feld, um den Wert des Switches zu speichern -->
-                    <input type="hidden" id="private" name="private" value="False">
-                </div>
-            </div>
-            <div class="row g-3 mt-3 align-items-start">
-                <div class="col-12 text-center">
-                    <button type="button" class="btn btn-success btn-lg me-3" onclick="createTour()">Tour erstellen</button>
-                    <button type="button" class="btn btn-danger btn-lg" onclick="deleteEntry()">Abbrechen</button>
-                </div>
-            </div>
-            <div id="notification"></div>
-        </div>
-        </form> 
-        <div class="row g-3 mt-3 mb-3" id="notification"></div>
-    </div>
-    <script>
-       document.addEventListener("DOMContentLoaded", function() {
-            let kolonneDropdownItems = document.querySelectorAll('#kolonneDropdown .dropdown-item');
-
-            kolonneDropdownItems.forEach(function(item) {
-                item.addEventListener('click', function() {
-                    let selectedKolonneValue = this.getAttribute('data-value');
-                    document.getElementById('kolonne').value = selectedKolonneValue;
-                    document.getElementById('kolonneDropdown').textContent = selectedKolonneValue;
-                });
-            });
-
-            let durationDropdownItems = document.querySelectorAll('#durationDropdown .dropdown-item');
-
-            durationDropdownItems.forEach(function(item) {
-                item.addEventListener('click', function() {
-                    let selectedDurationValue = this.getAttribute('data-value');
-                    document.getElementById('zeitbedarf').value = selectedDurationValue;
-                    document.getElementById('durationDropdown').textContent = selectedDurationValue; // Änderung: Zeigt die Zahl an
-                });
-            });
-       });
-    </script>
-    <script>
-        // Das JavaScript, um den Status des Switches zu speichern
+        <script>
+            //Funktion für die Auswahl der Kolonne und Aktualisierung des Wertes
         document.addEventListener("DOMContentLoaded", function() {
-            let privateSwitch = document.getElementById('private_switch');
-            let privateValue = document.getElementById('private');
-    
-            privateSwitch.addEventListener('change', function() {
-                privateValue.value = this.checked; // Der Boolesche Wert des Switches
-            });
+                let kolonneDropdownItems = document.querySelectorAll('#kolonneDropdown .dropdown-item');
+
+                kolonneDropdownItems.forEach(function(item) {
+                    item.addEventListener('click', function() {
+                        let selectedKolonneValue = this.getAttribute('data-value'); 
+                        document.getElementById('kolonne').value = selectedKolonneValue; //setzt den Form Wert auf ausgewählten Wert im Dropdown
+                        document.getElementById('kolonneDropdown').textContent = selectedKolonneValue; // ändert angezeigten Wert im Dropdown
+                    });
+                });
+
+                let durationDropdownItems = document.querySelectorAll('#durationDropdown .dropdown-item');
+
+                //Gleiches wie oben nur mit Zeitbedarf
+                durationDropdownItems.forEach(function(item) {
+                    item.addEventListener('click', function() {
+                        let selectedDurationValue = this.getAttribute('data-value');
+                        document.getElementById('zeitbedarf').value = selectedDurationValue;
+                        document.getElementById('durationDropdown').textContent = selectedDurationValue; // Änderung: Zeigt die Zahl an
+                    });
+                });
         });
-    </script>
-    <script>
-        function createTour() {
-            var form = document.getElementById("tourForm");
-            var formData = new FormData(form);
 
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === XMLHttpRequest.DONE) {
-                    if (xhr.status === 200) {
-                        var response = JSON.parse(xhr.responseText);
-                        showNotification(response.message)
-                        } else {
-                          showNotification('Error creating tour!', true)
-                        }
-                }
-            };
-            xhr.open("POST", "/create_tour", true);
-            xhr.send(formData);
-        }
-    </script>
-    <script>
-        function deleteEntry() {
-            document.getElementById('firmenname').value = '';
-            document.getElementById('date').value = '';
-            document.getElementById('strasse').value = '';
-            document.getElementById('hausnr').value = '';
-            document.getElementById('ort').value = '';
-            document.getElementById('plz').value = '';
-            document.getElementById('floatingTextarea').value = '';
-            document.getElementById('date').value = '';
-            document.getElementById('kolonneDropdown').innerText = 'Kolonne';
-            document.getElementById('durationDropdown').innerText = 'Zeitbedarf';
-            document.getElementById('kolonne').value = '';
-            document.getElementById('private_switch').checked = false;
-            document.getElementById('private').value = 'False'; 
-        }
-    </script>
-    <script>
-        function setSelectedValue(kolonneValue) {
-            document.getElementById('kolonne').value = kolonneValue;
-            document.getElementById('kolonneDropdown').textContent = kolonneValue;
-        }
+            //Funktion um den Wert des Switches zu speichern (wie oben)
+            document.addEventListener("DOMContentLoaded", function() {
+                let privateSwitch = document.getElementById('private_switch');
+                let privateValue = document.getElementById('private');
+        
+                privateSwitch.addEventListener('change', function() {
+                    privateValue.value = this.checked; 
+                });
+            });
 
-        function setSelectedDuration(zeitbedarfValue) {
-            document.getElementById('zeitbedarf').value = zeitbedarfValue;
-            document.getElementById('durationDropdown').textContent = zeitbedarfValue;
-        }
-    </script>
-    <script>
-        function showNotification(message, isError = false) {
-            const notification = document.createElement('div');
-            notification.className = `alert ${isError ? 'alert-danger' : 'alert-success'}`;
-            notification.textContent = message;
+            // AJAX Funktion die eine Tour über die Form erstellt
+            function createTour() {
+                var form = document.getElementById("tourForm");
+                var formData = new FormData(form);
 
-            document.body.appendChild(notification);
+                // hier wird die POST Anfrage an den Server gestellt
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            var response = JSON.parse(xhr.responseText);
+                            showNotification(response.message) //zeigt Benachrichtigung ob Tour angelegt werden konnte oder nicht
+                            } else {
+                            showNotification('Error creating tour!', true)
+                            }
+                    }
+                };
+                // Anfrage wird gesendet
+                xhr.open("POST", "/create_tour", true);
+                xhr.send(formData);
+            }
 
-            setTimeout(() => {
-                notification.remove();
-            }, 2000); // Zeit in Millisekunden, wie lange das Popup sichtbar sein soll (hier 5 Sekunden)
-        }
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
-</body>
+            //Funktion um alle ausgewählten/eingetragenen Werte bei Betätigung des Abbrechen Buttons zu clearen
+            function deleteEntry() {
+                document.getElementById('firmenname').value = '';
+                document.getElementById('date').value = '';
+                document.getElementById('strasse').value = '';
+                document.getElementById('hausnr').value = '';
+                document.getElementById('ort').value = '';
+                document.getElementById('plz').value = '';
+                document.getElementById('floatingTextarea').value = '';
+                document.getElementById('date').value = '';
+                document.getElementById('kolonneDropdown').innerText = 'Kolonne';
+                document.getElementById('durationDropdown').innerText = 'Zeitbedarf';
+                document.getElementById('kolonne').value = '';
+                document.getElementById('private_switch').checked = false;
+                document.getElementById('private').value = 'False'; 
+            }
+
+            // Funktionen zum Setzen des Dropdown Wertes in der Form
+            function setSelectedValue(kolonneValue) {
+                document.getElementById('kolonne').value = kolonneValue;
+                document.getElementById('kolonneDropdown').textContent = kolonneValue;
+            }
+
+            function setSelectedDuration(zeitbedarfValue) {
+                document.getElementById('zeitbedarf').value = zeitbedarfValue;
+                document.getElementById('durationDropdown').textContent = zeitbedarfValue;
+            }
+
+            // Funtkion, die die Notification anzeigt
+            function showNotification(message, isError = false) {
+                const notification = document.createElement('div');
+                notification.className = `alert ${isError ? 'alert-danger' : 'alert-success'}`;
+                notification.textContent = message;
+
+                document.body.appendChild(notification);
+
+                setTimeout(() => {
+                    notification.remove();
+                }, 2000); // Zeit in ms, wie lange das Popup sichtbar ist
+            }
+        </script>
+        <!--Wichtig um für die Funktionalität der Dropdown Menüs-->
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+        <!--Bootstrap JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+    </body>
 </html>

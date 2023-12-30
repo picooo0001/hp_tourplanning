@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
   <head>
+    <!--Standard Prozedur-->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tour Kalender</title>
-    <link href="style.css" rel="stylesheet">
+    <!--Bootstrap CSS-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css' rel='stylesheet'>
+    <!--Full Calendar-->
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
   </head>
+  <!--Style Anpassungen im body fpr den dunkelen Hintergrund-->
   <body style="background-color: #222; color: white;">
+    <!--NavBar-->
       <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,12 +38,15 @@
           </div>
         </div>
       </nav>
+    <!--Überschrift-->
     <div class="container-fluid mt-3 mb-3">
       <div class="d-flex justify-content-center align-items-center">
           <h1>Tour Kalender</h1>
       </div>
+      <!--Kalender wird hier eingebunden-->
       <div id="calendar"></div>
     <script>
+      // Kalendereinbindung und Konfiguration
       document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -60,13 +67,11 @@
           slotDuration: '01:00:00',
           slotLabelInterval: { hours: 1 },
           editable: true,
+          // Funktion, um das Event zu verschieben (Datum und Zeit), wird dynamisch in der DB gespeichert
           eventDrop: function(info) {
             var eventID = info.event.id;
-            console.log('Tour ID:', eventID);
-            // var newDate = info.event.start;
             var newStart = info.event.start.toISOString();
-            console.log(newStart)
-
+            // gleiches Vorgehen wie immer 
             fetch(`/update_event/`+ eventID, {
               method: 'POST',
               headers: {
@@ -82,18 +87,18 @@
               console.error("Fehler beim Aktualisieren:", error);
             });
           },
+          // hier kommen die Daten her
           eventSources: [
             {
-              url: '/get_tours', // Die Flask-Route zum Abrufen der Tour-Daten
+              url: '/get_tours', 
               method: 'GET',
-              extraParams: {
-                // Wenn benötigt, können hier zusätzliche Parameter hinzugefügt werden
-              },
               failure: function() {
                 console.log('Fehler beim Laden der Ereignisse!');
               }
             }
           ],
+
+          // die Funtkion gewährleister, dass sich die Dauer anpassen lässt
           eventResize: function(info) {
             var eventID = info.event.id;
             var start = info.event.start;
@@ -119,6 +124,7 @@
                 console.error("Fehler beim Aktualisieren der Dauer:", error);
             });
         },
+        // in dieser Funktion werden die "Attribute" die durch "eventSources" empfangen wurden in die Events geschrieben
         eventContent: function(arg) {
           return {
             html: '<b>' + arg.event.title + '</b>' + '<br>' + arg.event.extendedProps.description
@@ -127,9 +133,11 @@
           eventDisplay: 'block',
           displayEventTime: true
         });
+        // rendert den gesamten Kalender
           calendar.render();
         });
+        // Bootstrap js
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>

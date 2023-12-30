@@ -8,6 +8,9 @@ from db_connect_disconnect import DatabaseConnector
 from datetime import datetime, timedelta, time
 from log_config import LogConfig
 
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
 log_config = LogConfig()
 logger = log_config.setup_logger('flask_app.log', 'flask_app.log')
 

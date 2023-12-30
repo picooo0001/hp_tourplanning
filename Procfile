@@ -1,1 +1,1 @@
-web: gunicorn app:app
+web: gunicorn tour_planning.code.app:app

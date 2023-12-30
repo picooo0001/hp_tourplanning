@@ -18,7 +18,8 @@ class DataWriter:
 
     def __init__(self, date, kolonne, strasse, hausnr, plz, ort, firmenname, info, private, zeitbedarf, start_time):
         """Initialisiert die DataWriter-Klasse."""
-        self.db_connector = DatabaseConnector('postgresql://hp_admin:Nudelholz03#@localhost/hp_postgres')
+        self.db_connector = DatabaseConnector('postgres://hjosbvtqcidmbk:14c260d367e129e5d94221b2ba7ac414c72a969a561707ff8d680ce67264c65f@ec2-3-217-146-37.compute-1.amazonaws.com:5432/d317upfk639k0r')
+        #self.db_connector = DatabaseConnector('postgresql://hp_admin:Nudelholz03#@localhost/hp_postgres')
         self.session, _ = self.db_connector.get_session()
         log_config = LogConfig()
         self.logger = log_config.setup_logger('db_entry_log', 'db_entry.log')

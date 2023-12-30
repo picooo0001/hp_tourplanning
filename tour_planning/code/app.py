@@ -28,7 +28,8 @@ def to_dict(model):
 app = Flask(__name__, static_folder='static')
 app.secret_key = 'supersecretkey'
 
-db_connection = DatabaseConnector('postgresql://hp_admin:Nudelholz03#@localhost/hp_postgres')
+#db_connection = DatabaseConnector('postgresql://hp_admin:Nudelholz03#@localhost/hp_postgres')
+db_connection = DatabaseConnector('postgres://hjosbvtqcidmbk:14c260d367e129e5d94221b2ba7ac414c72a969a561707ff8d680ce67264c65f@ec2-3-217-146-37.compute-1.amazonaws.com:5432/d317upfk639k0r')
 
 @app.route('/')
 def index():

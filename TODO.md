@@ -1,6 +1,6 @@
 # To do's:    
     - [ ] Hosting / Server
-    - [ ] Beschreibungs file, das Vorgehen Herausforderungen etc erklärt
+    - [ ] Beschreibungs file, das Vorgehen Herausforderungen etc erklärt (Docs)
 
     - [ ] Further Info Anzeige bei Vierteltag Events überarbeiten
     - [ ] Landing page
@@ -11,5 +11,3 @@
     - [ ] Evtl. Tour Kalender redesign
 
     
-
-

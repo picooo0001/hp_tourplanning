@@ -1,12 +1,12 @@
 from flask import Flask, session, redirect, url_for, request, render_template, jsonify, send_from_directory
 from werkzeug.security import check_password_hash
 from functools import wraps
+from flask_sqlalchemy import SQLAlchemy
 #from input_to_database import DataWriter
 #from orm import Tour, Address, Client, User
 #from db_connect_disconnect import DatabaseConnector
 from datetime import datetime, timedelta, time
 from log_config import LogConfig
-from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import joinedload
 
 
@@ -29,7 +29,7 @@ def to_dict(model):
 
 app = Flask(__name__, static_folder='static')
 app.config['SQLALCHEMY_TRACK_MODIFICATION'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://hjosbvtqcidmbk:14c260d367e129e5d94221b2ba7ac414c72a969a561707ff8d680ce67264c65f@ec2-3-217-146-37.compute-1.amazonaws.com:5432/d317upfk639k0r'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://zyzaedugpkirat:3ec08a08886f754a14800907a13c120e47ec177e761444db8a66cdadc1ea7a0c@ec2-3-217-146-37.compute-1.amazonaws.com:5432/dav0fmh2bi56a2'
 app.secret_key = 'supersecretkey'
 
 db = SQLAlchemy(app)

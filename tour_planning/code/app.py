@@ -6,12 +6,12 @@ from flask_sqlalchemy import SQLAlchemy
 #from orm import Tour, Address, Client, User
 #from db_connect_disconnect import DatabaseConnector
 from datetime import datetime, timedelta, time
-from log_config import LogConfig
+#from log_config import LogConfig
 from sqlalchemy.orm import joinedload
 
 
-log_config = LogConfig()
-logger = log_config.setup_logger('flask_app.log', 'flask_app.log')
+#log_config = LogConfig()
+#logger = log_config.setup_logger('flask_app.log', 'flask_app.log')
 
 def login_required(route_function):
     """Diese Methode sorgt dafür, dass die Endpoints geschützt werden und nicht ohne Anmeldung darauf zugegriffen werden kann."""
@@ -122,13 +122,13 @@ def login():
 
         if user and check_password_hash(user.password_hash, password):
             session['logged_in'] = True
-            logger.info(session)
+            #logger.info(session)
             return jsonify({'message': 'Anmeldung erfolgreich'}),200
         else:
-            logger.warning("Ungültige Anmeldeinformationen")
+            #logger.warning("Ungültige Anmeldeinformationen")
             return jsonify({'message': 'Ungültige Anmeldeinformationen'}), 401
     except Exception as e:
-        logger.error(e)
+        #logger.error(e)
         return jsonify({'error': str(e)}), 500
 
 @app.route('/logout')
@@ -141,10 +141,10 @@ def logout():
     """
     try:
         session.pop('logged_in', None)
-        logger.info(session)
+        #logger.info(session)
         return redirect(url_for('index'))
     except Exception as e:
-        logger.error(e)
+        #logger.error(e)
         return jsonify({'error': str(e)}), 500
 
 @app.route('/create_tour', methods=['POST'])
@@ -192,11 +192,11 @@ def create_tour():
         db.session.add(new_address)
         db.session.add(new_client)
 
-        logger.info("Tour successfully created!")
+        #logger.info("Tour successfully created!")
         return jsonify({'message': 'Tour successfully created!'})
             
     except Exception as e:
-        logger.error(e)
+        #logger.error(e)
         return jsonify({'error': str(e)}), 500
 
 
@@ -249,11 +249,11 @@ def get_tours():
                 'description': f"{client.firmenname} <br> {address.strasse} {address.hausnr} <br> {address.ort} <br> {address.plz} <br> {tour.further_info}"
             })
 
-        logger.info(formatted_tours)
+        #logger.info(formatted_tours)
         return jsonify(formatted_tours)
     
     except Exception as e:
-        logger.error(e)
+        #logger.error(e)
         return jsonify({'error': str(e)}), 500
 
 @app.route('/update_duration/<int:eventID>', methods=['POST'])
@@ -276,14 +276,14 @@ def update_duration(eventID):
         if tour:
             tour.zeitbedarf = new_duration
             db.session.commit()
-            logger.info("Event-Dauer erfolgreich aktualisiert")
+            #logger.info("Event-Dauer erfolgreich aktualisiert")
             return jsonify({'message': 'Event-Dauer erfolgreich aktualisiert'})
         else:
-            logger.warning("Tour nicht gefunden")
+            #logger.warning("Tour nicht gefunden")
             return jsonify({'error': 'Tour nicht gefunden'}), 404
 
     except Exception as e:
-        logger.error(e)
+        #logger.error(e)
         return jsonify({'error': str(e)}), 500
     
 @app.route('/show_tours', methods=['GET'])
@@ -310,11 +310,11 @@ def show_tours():
             }
             for tour in tours
         ]
-        logger.info(serialized_tours)
+        #logger.info(serialized_tours)
         return jsonify(serialized_tours)
     
     except Exception as e:
-        logger.error(e)
+        #logger.error(e)
         return jsonify({'error': str(e)}), 500
 
 @app.route('/delete_tour/<int:tour_id>', methods=['DELETE'])
@@ -335,14 +335,14 @@ def delete_tour(tour_id):
         if tour_to_delete:
             db.session.delete(tour_to_delete)
             db.session.commit()
-            logger.info(f'Tour mit ID {tour_id} wurde erfolgreich gelöscht.')
+            #logger.info(f'Tour mit ID {tour_id} wurde erfolgreich gelöscht.')
             return jsonify({'message': f'Tour mit ID {tour_id} wurde erfolgreich gelöscht.'}), 200
         else:
-            logger.warning(f'Tour mit ID {tour_id} nicht gefunden.')
+            #logger.warning(f'Tour mit ID {tour_id} nicht gefunden.')
             return jsonify({'error': f'Tour mit ID {tour_id} nicht gefunden.'}), 404
     
     except Exception as e:
-        logger.error(e)
+        #logger.error(e)
         return jsonify({'error': str(e)}), 500
     
 @app.route('/change_kolonne/<int:tour_id>/<new_kolonne>', methods=['PUT'])
@@ -364,13 +364,13 @@ def change_kolonne(tour_id, new_kolonne):
         if tour:
             tour.kolonne_type = new_kolonne
             db.session.commit()
-            logger.info(f'Kolonne für Tour {tour_id} erfolgreich geändert')
+            #logger.info(f'Kolonne für Tour {tour_id} erfolgreich geändert')
             return jsonify({'message': f'Kolonne für Tour {tour_id} erfolgreich geändert'})
         else:
-            logger.warning(f'Tour mit ID {tour_id} nicht gefunden')
+            #logger.warning(f'Tour mit ID {tour_id} nicht gefunden')
             return jsonify({'error': f'Tour mit ID {tour_id} nicht gefunden'}), 404
     except Exception as e:
-        logger.error(e)
+        #logger.error(e)
         return jsonify({'error': str(e)}), 500
     
 @app.route('/update_event/<int:eventID>', methods=['POST'])
@@ -395,14 +395,14 @@ def update_event(eventID):
             tour.date = new_start_datetime.date()
             tour.start_time = new_start_datetime.time()
             db.session.commit()
-            logger.info(f'Tourdatum der Tour ID {eventID} erfolgreich aktualisiert')
+            #logger.info(f'Tourdatum der Tour ID {eventID} erfolgreich aktualisiert')
             return jsonify({'message': f'Tourdatum der Tour ID {eventID} erfolgreich aktualisiert'})
         else:
-            logger.warning(f'Tour mit ID {eventID} nicht gefunden')
+            #logger.warning(f'Tour mit ID {eventID} nicht gefunden')
             return jsonify({'error': f'Tour mit ID {eventID} nicht gefunden'}), 404
 
     except Exception as e:
-        logger.error(e)
+        #logger.error(e)
         return jsonify({'error': str(e)}), 500
 
     
@@ -437,17 +437,17 @@ def change_address(tour_id):
                 address.plz = new_address['plz']
                 address.ort = new_address['ort']
                 db.session.commit()
-                logger.info(f'Adresse der Tour mit der ID: {tour_id} erfolgreich geändert')
+                #logger.info(f'Adresse der Tour mit der ID: {tour_id} erfolgreich geändert')
                 return jsonify({'message': f'Adresse der Tour mit der ID: {tour_id} erfolgreich geändert'})
             else:
-                logger.warning(f'Adresse der Tour mit der ID: {tour_id} nicht gefunden')
+                #logger.warning(f'Adresse der Tour mit der ID: {tour_id} nicht gefunden')
                 return jsonify({'error': f'Adresse der Tour mit der ID: {tour_id} nicht gefunden'}), 404
         else:
-            logger.warning(f'Adresse der Tour mit der ID: {tour_id} nicht gefunden')
+            #logger.warning(f'Adresse der Tour mit der ID: {tour_id} nicht gefunden')
             return jsonify({'error': f'Adresse der Tour mit der ID: {tour_id} nicht gefunden'}), 404
 
     except Exception as e:
-        logger.error(e)
+        #logger.error(e)
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':

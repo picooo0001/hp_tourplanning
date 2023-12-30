@@ -32,8 +32,13 @@ app = Flask(__name__, static_folder='static')
 app.config['DATABASE_URL'] = 'postgres://hjosbvtqcidmbk:14c260d367e129e5d94221b2ba7ac414c72a969a561707ff8d680ce67264c65f@ec2-3-217-146-37.compute-1.amazonaws.com:5432/d317upfk639k0r'
 app.secret_key = 'supersecretkey'
 
+engine = create_engine(app.config['DATABASE_URL'])
+Session = sessionmaker(bind=engine)
+
 #db_connection = DatabaseConnector('postgresql://hp_admin:Nudelholz03#@localhost/hp_postgres')
-db_connection = DatabaseConnector(app.config['DATABASE_URL'])
+#db_connection = DatabaseConnector(app.config['DATABASE_URL'])
+
+
 
 @app.route('/')
 def index():
@@ -43,7 +48,17 @@ def index():
     Returns:
         str: HTML-Seite für die Startseite ('login_page.html').
     """
-    return render_template('login_page.html')
+    try:
+        session = Session()
+        message = "Verbindung erfolgreich hergestellt."
+        logger.info(message)
+        # Führe hier Datenbankoperationen mit 'session' aus
+        return render_template('login_page.html')
+    except Exception as e:
+        message = f"Fehler beim Verbindungsaufbau: {str(e)}"
+        logger.error(message)
+        return f"Fehler: {str(e)}"
+
 
 @app.route('/<path:filename>')
 def send_html(filename):

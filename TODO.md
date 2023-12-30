@@ -1,6 +1,5 @@
 # To do's:    
     - [ ] Hosting / Server
-    - [ ] Beschreibungen im Code / Code überarbeiten
     - [ ] Beschreibungs file, das Vorgehen Herausforderungen etc erklärt
 
     - [ ] Further Info Anzeige bei Vierteltag Events überarbeiten

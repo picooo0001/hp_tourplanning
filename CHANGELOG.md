@@ -92,3 +92,4 @@
 - added docstrings for the methods inside the different flask routes 
 - added logging to the flask app for an better overview
 - added commentary to all html files / removes not needed code
+- updated README.md

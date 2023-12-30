@@ -1,12 +1,12 @@
 from flask import Flask, session, redirect, url_for, request, render_template, jsonify, send_from_directory
 from werkzeug.security import check_password_hash
 from functools import wraps
-from flask_sqlalchemy import SQLAlchemy
 #from input_to_database import DataWriter
 #from orm import Tour, Address, Client, User
 #from db_connect_disconnect import DatabaseConnector
 from datetime import datetime, timedelta, time
 #from log_config import LogConfig
+from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import joinedload
 
 

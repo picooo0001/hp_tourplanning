@@ -1,15 +1,14 @@
 from flask import Flask, session, redirect, url_for, request, render_template, jsonify, send_from_directory
 from werkzeug.security import check_password_hash
-from sqlalchemy.orm import joinedload
 from functools import wraps
-from input_to_database import DataWriter
-from orm import Tour, Address, Client, User
-from db_connect_disconnect import DatabaseConnector
+#from input_to_database import DataWriter
+#from orm import Tour, Address, Client, User
+#from db_connect_disconnect import DatabaseConnector
 from datetime import datetime, timedelta, time
 from log_config import LogConfig
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import joinedload
 
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 
 log_config = LogConfig()
 logger = log_config.setup_logger('flask_app.log', 'flask_app.log')
@@ -29,12 +28,60 @@ def to_dict(model):
     return dict((c, getattr(model, c)) for c in columns)
 
 app = Flask(__name__, static_folder='static')
-app.config['DATABASE_URL'] = 'postgres://hjosbvtqcidmbk:14c260d367e129e5d94221b2ba7ac414c72a969a561707ff8d680ce67264c65f@ec2-3-217-146-37.compute-1.amazonaws.com:5432/d317upfk639k0r'
+app.config['SQLALCHEMY_TRACK_MODIFICATION'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://hjosbvtqcidmbk:14c260d367e129e5d94221b2ba7ac414c72a969a561707ff8d680ce67264c65f@ec2-3-217-146-37.compute-1.amazonaws.com:5432/d317upfk639k0r'
 app.secret_key = 'supersecretkey'
 
-#db_connection = DatabaseConnector('postgresql://hp_admin:Nudelholz03#@localhost/hp_postgres')
-db_connection = DatabaseConnector(app.config['DATABASE_URL'])
+db = SQLAlchemy(app)
 
+class Tour(db.Model):
+    """Tabelle für Touren."""
+    __tablename__ = 'tour'
+
+    tour_id = db.Column(db.Integer,primary_key=True, autoincrement=True)
+    address_id = db.Column(db.SmallInteger, db.ForeignKey('address.address_id'))
+    client_id = db.Column(db.SmallInteger, db.ForeignKey('client.client_id'))
+    date = db.Column(db.Date)
+    kolonne_type = db.Column(db.VARCHAR(255))
+    private = db.Column(db.VARCHAR(225))
+    further_info = db.Column(db.VARCHAR(255))
+    zeitbedarf = db.Column(db.Numeric(3,2))
+    start_time = db.Column(db.Time)
+
+    client = db.relationship("Client", back_populates="tours")
+    address = db.relationship("Address")
+
+
+    def __repr__(self):
+        """Gibt eine lesbare Repräsentation der Tour-Tabelle zurück."""
+        return f"<TourTable(id={self.tour_id}, kolonne_type={self.kolonne_type})>"
+
+class Address(db.Model):
+    """Tabelle für Adressen."""
+    __tablename__ = 'address'
+
+    address_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    strasse = db.Column(db.VARCHAR(255))
+    hausnr = db.Column(db.VARCHAR(20))
+    plz = db.Column(db.Integer)
+    ort = db.Column(db.VARCHAR(100))
+
+class Client(db.Model):
+    """Tabelle für Kunden."""
+    __tablename__ = 'client'
+
+    client_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    firmenname = db.Column(db.VARCHAR(255))
+    
+    tours = db.relationship("Tour")
+
+class User(db.Model):
+    """Tabelle für Login Daten"""
+    __tablename__ = 'users'
+
+    id = db.Column(db.nteger, primary_key=True)
+    username = db.Column(db.String(50), unique=True, nullable=False)
+    password_hash = db.Column(db.String(200), nullable=False)
 
 @app.route('/')
 def index():
@@ -58,6 +105,7 @@ def send_html(filename):
         file: Die angeforderte Datei aus dem 'templates'-Ordner.
     """
     return send_from_directory('templates', filename)
+
 @app.route('/login', methods=['POST'])
 def login():
     """
@@ -70,8 +118,7 @@ def login():
         data = request.json
         username = data.get('username')
         password = data.get('password')
-        db_session, connection_status = db_connection.get_session()
-        user = db_session.query(User).filter_by(username=username).first()
+        user = User.query.filter_by(username=username).first()
 
         if user and check_password_hash(user.password_hash, password):
             session['logged_in'] = True
@@ -122,18 +169,31 @@ def create_tour():
             private = request.form['private']
             zeitbedarf = request.form['zeitbedarf']
 
-            db_writer = DataWriter(date, kolonne, strasse, hausnr, plz, ort, firmenname, info, private, zeitbedarf, start_time="08:00:00")
-            db_connector = DatabaseConnector(app.config['DATABASE_URL'])
-            db_connector.get_session()
-            db_writer.write_tour_data_to_db()
-            db_connector.close_connection()
+        new_tour = Tour(
+            date=date,
+            kolonne_type=kolonne,
+            further_info=info,
+            private=private,
+            zeitbedarf=zeitbedarf
+        )
 
-            if db_writer:
-                logger.info("Tour successfully created!")
-                return jsonify({'message': 'Tour successfully created!'})
-            else:
-                logger.warning("Error creating tour!")
-                return jsonify({'message': 'Error creating tour!'}), 500
+        new_address = Address(
+            strasse=strasse,
+            hausnr=hausnr,
+            plz=plz,
+            ort=ort
+        )
+
+        new_client = Client(
+            firmenname = firmenname
+        )
+
+        db.session.add(new_tour)
+        db.session.add(new_address)
+        db.session.add(new_client)
+
+        logger.info("Tour successfully created!")
+        return jsonify({'message': 'Tour successfully created!'})
             
     except Exception as e:
         logger.error(e)
@@ -156,9 +216,7 @@ def get_tours():
         start_date = datetime.fromisoformat(start_date_str.replace('T', ' '))
         end_date = datetime.fromisoformat(end_date_str.replace('T', ' '))
 
-        db_session, connection_status = db_connection.get_session()
-
-        events = db_session.query(Tour, Address, Client)\
+        events = db.session.query(Tour, Address, Client)\
             .join(Client, Client.client_id == Tour.client_id)\
             .join(Address, Address.address_id == Tour.address_id)\
             .filter(Tour.date >= start_date, Tour.date <= end_date).all()
@@ -191,10 +249,6 @@ def get_tours():
                 'description': f"{client.firmenname} <br> {address.strasse} {address.hausnr} <br> {address.ort} <br> {address.plz} <br> {tour.further_info}"
             })
 
-        close_status, close_message = db_connection.close_connection()
-        if not close_status:
-            logger.error(close_message)
-            print("Fehler beim Schließen der Verbindung:", close_message)
         logger.info(formatted_tours)
         return jsonify(formatted_tours)
     
@@ -217,13 +271,11 @@ def update_duration(eventID):
     try:
         data = request.json
         new_duration = float(data.get('newDuration'))
-
-        db_session, connection_status = db_connection.get_session()
-
-        tour = db_session.query(Tour).filter_by(tour_id=eventID).first()
+        tour = Tour.query.get(eventID)
+        
         if tour:
             tour.zeitbedarf = new_duration
-            db_session.commit()
+            db.session.commit()
             logger.info("Event-Dauer erfolgreich aktualisiert")
             return jsonify({'message': 'Event-Dauer erfolgreich aktualisiert'})
         else:
@@ -244,8 +296,7 @@ def show_tours():
         JSON: Liste aller Touren und ihrer Details.
     """
     try: 
-        db_session, connection_status = db_connection.get_session()
-        tours = db_session.query(Tour).options(joinedload(Tour.client), joinedload(Tour.address)).all()
+        tours = Tour.query.options(joinedload(Tour.client), joinedload(Tour.address)).all()
         serialized_tours = [
             {
                 'tour_id': tour.tour_id,
@@ -279,12 +330,11 @@ def delete_tour(tour_id):
         JSON: Status der Löschung
     """
     try:
-        db_session, connection_status = db_connection.get_session()
-        tour_to_delete = db_session.query(Tour).filter_by(tour_id=tour_id).first()
+        tour_to_delete = Tour.query.get(tour_id)
 
         if tour_to_delete:
-            db_session.delete(tour_to_delete)
-            db_session.commit()
+            db.session.delete(tour_to_delete)
+            db.session.commit()
             logger.info(f'Tour mit ID {tour_id} wurde erfolgreich gelöscht.')
             return jsonify({'message': f'Tour mit ID {tour_id} wurde erfolgreich gelöscht.'}), 200
         else:
@@ -309,12 +359,11 @@ def change_kolonne(tour_id, new_kolonne):
         JSON: Status der Änderung 
     """
     try:
-        db_session, connection_status = db_connection.get_session()
-        tour = db_session.query(Tour).filter_by(tour_id=tour_id).first()
-        
+        tour = Tour.query.get(tour_id)
+
         if tour:
             tour.kolonne_type = new_kolonne
-            db_session.commit()
+            db.session.commit()
             logger.info(f'Kolonne für Tour {tour_id} erfolgreich geändert')
             return jsonify({'message': f'Kolonne für Tour {tour_id} erfolgreich geändert'})
         else:
@@ -339,16 +388,13 @@ def update_event(eventID):
     try: 
         data = request.json
         new_start = data.get('newStart')
-
         new_start_datetime = datetime.fromisoformat(new_start)
+        tour = Tour.query.get(eventID)
 
-        db_session, connection_status = db_connection.get_session()
-
-        tour = db_session.query(Tour).filter_by(tour_id=eventID).first()
         if tour:
-            tour.date = new_start_datetime.date()  # Datum aktualisieren
+            tour.date = new_start_datetime.date()
             tour.start_time = new_start_datetime.time()
-            db_session.commit()
+            db.session.commit()
             logger.info(f'Tourdatum der Tour ID {eventID} erfolgreich aktualisiert')
             return jsonify({'message': f'Tourdatum der Tour ID {eventID} erfolgreich aktualisiert'})
         else:
@@ -381,36 +427,28 @@ def change_address(tour_id):
         plz = new_address.get('plz')
         ort = new_address.get('ort')
 
-        db_session, connection_status = db_connection.get_session()
-        tour = db_session.query(Tour).filter_by(tour_id=tour_id).first()
+        tour = Tour.query.get(tour_id)
 
         if tour:
-            address = db_session.query(Address).filter_by(address_id=tour.address_id).first()
+            address = tour.address
             if address:
                 address.strasse = new_address['strasse']
                 address.hausnr = new_address['hausnr']
                 address.plz = new_address['plz']
                 address.ort = new_address['ort']
-                db_session.commit()
-                db_session.close()
+                db.session.commit()
                 logger.info(f'Adresse der Tour mit der ID: {tour_id} erfolgreich geändert')
                 return jsonify({'message': f'Adresse der Tour mit der ID: {tour_id} erfolgreich geändert'})
             else:
-                db_session.close()
                 logger.warning(f'Adresse der Tour mit der ID: {tour_id} nicht gefunden')
                 return jsonify({'error': f'Adresse der Tour mit der ID: {tour_id} nicht gefunden'}), 404
         else:
-            db_session.close()
             logger.warning(f'Adresse der Tour mit der ID: {tour_id} nicht gefunden')
             return jsonify({'error': f'Adresse der Tour mit der ID: {tour_id} nicht gefunden'}), 404
 
     except Exception as e:
         logger.error(e)
         return jsonify({'error': str(e)}), 500
-
-if __name__ == '__main__':
-    app.run(debug=True)
-
 
 if __name__ == '__main__':
     app.run(debug=True)

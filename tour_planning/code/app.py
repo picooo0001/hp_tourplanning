@@ -26,10 +26,11 @@ def to_dict(model):
     return dict((c, getattr(model, c)) for c in columns)
 
 app = Flask(__name__, static_folder='static')
+app.config['DATABASE_URL'] = 'postgres://hjosbvtqcidmbk:14c260d367e129e5d94221b2ba7ac414c72a969a561707ff8d680ce67264c65f@ec2-3-217-146-37.compute-1.amazonaws.com:5432/d317upfk639k0r'
 app.secret_key = 'supersecretkey'
 
 #db_connection = DatabaseConnector('postgresql://hp_admin:Nudelholz03#@localhost/hp_postgres')
-db_connection = DatabaseConnector('postgres://hjosbvtqcidmbk:14c260d367e129e5d94221b2ba7ac414c72a969a561707ff8d680ce67264c65f@ec2-3-217-146-37.compute-1.amazonaws.com:5432/d317upfk639k0r')
+db_connection = DatabaseConnector(app.config['DATABASE_URL'])
 
 @app.route('/')
 def index():
@@ -119,7 +120,7 @@ def create_tour():
             zeitbedarf = request.form['zeitbedarf']
 
             db_writer = DataWriter(date, kolonne, strasse, hausnr, plz, ort, firmenname, info, private, zeitbedarf, start_time="08:00:00")
-            db_connector = DatabaseConnector('postgres://hjosbvtqcidmbk:14c260d367e129e5d94221b2ba7ac414c72a969a561707ff8d680ce67264c65f@ec2-3-217-146-37.compute-1.amazonaws.com:5432/d317upfk639k0r')
+            db_connector = DatabaseConnector(app.config['DATABASE_URL'])
             db_connector.get_session()
             db_writer.write_tour_data_to_db()
             db_connector.close_connection()

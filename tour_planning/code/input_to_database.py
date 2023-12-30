@@ -1,6 +1,5 @@
 from db_connect_disconnect import DatabaseConnector
 from orm import Tour, Address, Client
-from user_input import TourCreation
 from background_checks import BackgroundChecks
 from log_config import LogConfig
 from sqlalchemy import and_
@@ -21,7 +20,6 @@ class DataWriter:
         """Initialisiert die DataWriter-Klasse."""
         self.db_connector = DatabaseConnector('postgresql://hp_admin:Nudelholz03#@localhost/hp_postgres')
         self.session, _ = self.db_connector.get_session()
-        self.tourcreation = TourCreation()
         log_config = LogConfig()
         self.logger = log_config.setup_logger('db_entry_log', 'db_entry.log')
 
